@@ -1,1 +1,0 @@
-# lifemaxxing-rutine
