@@ -368,7 +368,7 @@ const R={
 // ── Cloud Sync ─────────────────────────────────────────
 const FB='https://rutine-f29f9-default-rtdb.europe-west1.firebasedatabase.app/rutine';
 (()=>{const _s=R.set.bind(R);R.set=(k,v)=>{_s(k,v);fetch(`${FB}/${k}.json`,{method:'PUT',body:JSON.stringify(v)}).catch(()=>{});};})();
-(async()=>{if(sessionStorage.getItem('rt_synced'))return;try{const res=await fetch(`${FB}.json`);const data=await res.json();sessionStorage.setItem('rt_synced','1');if(data&&typeof data==='object'){let c=false;Object.entries(data).forEach(([k,v])=>{const s=JSON.stringify(v);if(localStorage.getItem('rt_'+k)!==s){localStorage.setItem('rt_'+k,s);c=true;}});if(c)location.reload();}}catch(e){sessionStorage.setItem('rt_synced','1');}})();
+(async()=>{const LS=parseInt(localStorage.getItem('rt__ls')||'0');if(Date.now()-LS<30000)return;try{const res=await fetch(`${FB}.json`);const data=await res.json();localStorage.setItem('rt__ls',Date.now());if(data&&typeof data==='object'){let c=false;Object.entries(data).forEach(([k,v])=>{if(k==='test_sync')return;const s=JSON.stringify(v);if(localStorage.getItem('rt_'+k)!==s){localStorage.setItem('rt_'+k,s);c=true;}});if(c)location.reload();}}catch(e){}})();
 
 function togAcc(id){document.getElementById(id).classList.toggle('open');}
 
