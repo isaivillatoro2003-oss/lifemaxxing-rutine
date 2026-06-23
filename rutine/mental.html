@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>RUTINE — Mente</title>
+<style>
+:root{--bg:#090909;--s1:#0f0f0f;--s2:#141414;--s3:#1a1a1a;--br:#1d1d1d;--br2:#272727;--tx:#e0e0e0;--mu:#505050;--mu2:#2e2e2e;--ac:#c9a96e;--ac2:#7a6040;--ac3:#e8d4a0;--rd:#c0392b;--gn:#27ae60}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);font-family:-apple-system,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;min-height:100vh;padding-bottom:72px}a{color:inherit;text-decoration:none}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(9,9,9,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--br);display:flex;align-items:center;padding:0 1.25rem;height:52px;gap:1rem}
+.brand{font-family:monospace;font-size:10px;letter-spacing:.42em;color:var(--ac);flex-shrink:0}
+.pgtitle{font-family:monospace;font-size:9px;letter-spacing:.22em;color:var(--mu);text-transform:uppercase;flex:1}
+.spill{font-family:monospace;font-size:11px;background:var(--ac);color:var(--bg);padding:.2rem .6rem;min-width:46px;text-align:center;flex-shrink:0}
+.botnav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(9,9,9,.97);border-top:1px solid var(--br);display:flex;height:72px;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--mu);transition:color .15s;cursor:pointer;font-family:monospace;font-size:8.5px;letter-spacing:.1em;border:none;background:none;position:relative;padding:0}
+.bn::after{content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;background:transparent;transition:background .15s}
+.bn.on{color:var(--ac)}.bn.on::after{background:var(--ac)}.bns{font-size:16px;line-height:1}
+@media(min-width:768px){body{padding-bottom:0;padding-left:196px}.topbar{left:196px}.botnav{width:196px;top:0;bottom:0;left:0;right:auto;height:auto;flex-direction:column;justify-content:flex-start;border-top:none;border-right:1px solid var(--br);padding:52px 0 0}.bn{flex:none;flex-direction:row;justify-content:flex-start;gap:.7rem;padding:.9rem 1.25rem;font-size:11px;width:100%}.bn::after{top:0;bottom:0;left:0;right:auto;width:2px;height:auto}.bns{font-size:14px}}
+.main{max-width:700px;margin:0 auto;padding:1.5rem 1.25rem}
+.lbl{font-family:monospace;font-size:8.5px;letter-spacing:.28em;color:var(--mu);text-transform:uppercase;margin:1.75rem 0 .7rem}.lbl:first-child{margin-top:0}
+.card{background:var(--s1);border:1px solid var(--br);padding:1rem;margin-bottom:.7rem}
+.clbl{font-family:monospace;font-size:8px;letter-spacing:.24em;color:var(--ac);text-transform:uppercase;display:block;margin-bottom:.7rem}
+.acc{margin-bottom:.4rem}
+.ah{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem;background:var(--s1);border:1px solid var(--br);cursor:pointer;user-select:none;min-height:52px;transition:background .15s}
+.ah:hover,.ah:active{background:var(--s2)}.ah-l{display:flex;align-items:center;gap:.65rem}.ah-s{font-size:14px}.ah-t{font-size:14px;font-weight:500}.ah-a{font-family:monospace;font-size:10px;color:var(--mu);transition:transform .2s;flex-shrink:0}.acc.open .ah-a{transform:rotate(90deg)}.ab{display:none;background:var(--s2);border:1px solid var(--br);border-top:none;padding:1rem}.acc.open .ab{display:block}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}.tbl th{font-family:monospace;font-size:8px;letter-spacing:.16em;color:var(--mu);text-transform:uppercase;text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--br)}.tbl td{padding:.65rem .7rem;border-bottom:1px solid var(--br);vertical-align:top}.tbl tr:last-child td{border-bottom:none}
+.rules{display:grid;gap:.38rem}.rule{font-size:13px;color:var(--mu);padding-left:1.1rem;position:relative;line-height:1.5}.rule::before{content:'—';position:absolute;left:0;color:var(--ac2);font-family:monospace}
+.btn{padding:.6rem 1.2rem;background:transparent;border:1px solid var(--br2);color:var(--tx);font-family:monospace;font-size:9px;letter-spacing:.18em;cursor:pointer;min-height:44px;transition:all .15s;text-transform:uppercase}.btn:active,.btn:hover{background:var(--s2)}.btn.pr{border-color:var(--ac);color:var(--ac)}.btn.pr:active,.btn.pr:hover{background:var(--ac);color:var(--bg)}.btn.rd{border-color:var(--rd);color:var(--rd)}
+.tface{font-family:monospace;font-size:3.8rem;text-align:center;color:var(--tx);letter-spacing:.08em;margin:1rem 0}
+.trow{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.875rem}
+.presets{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:.875rem}
+.ps{padding:.4rem .85rem;background:transparent;border:1px solid var(--br2);color:var(--mu);font-family:monospace;font-size:9px;cursor:pointer;transition:all .15s;min-height:40px}.ps.on{border-color:var(--ac);color:var(--ac)}
+textarea{background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--tx);font-size:14px;width:100%;min-height:80px;resize:none;outline:none;line-height:1.65;padding:.4rem 0;font-family:inherit}.textarea-tall{min-height:120px}
+textarea::placeholder{color:var(--mu);font-style:italic}textarea:focus{border-bottom-color:var(--ac)}
+.field{display:flex;flex-direction:column;gap:.35rem;padding:.75rem 0;border-bottom:1px solid var(--br)}.field:last-child{border-bottom:none}.flbl{font-family:monospace;font-size:9px;letter-spacing:.16em;color:var(--mu);text-transform:uppercase}
+input[type=number],input[type=text]{background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--tx);font-size:15px;font-family:inherit;width:100%;outline:none;padding:.25rem 0;-webkit-appearance:none}input:focus{border-bottom-color:var(--ac)}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.5rem 0}.chip{font-family:monospace;font-size:9px;color:var(--mu);border:1px solid var(--br2);padding:.2rem .55rem}.chip.ac{border-color:var(--ac2);color:var(--ac)}
+.steps{display:flex;flex-direction:column}.step{display:flex;gap:.7rem;padding:.75rem 0;border-bottom:1px solid var(--br)}.step:last-child{border-bottom:none}.stn{font-family:monospace;font-size:9px;color:var(--ac);min-width:20px;padding-top:.15rem;flex-shrink:0}.stb h4{font-size:13px;font-weight:500;margin-bottom:.2rem}.stb p{font-size:12px;color:var(--mu);line-height:1.5}
+.qt{border-left:2px solid var(--ac2);padding:.65rem .875rem;margin:.65rem 0;background:var(--s3)}.qt p{font-style:italic;font-size:13px;color:var(--mu)}.qt cite{font-style:normal;font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.1em;display:block;margin-top:.25rem}
+hr{border:none;border-top:1px solid var(--br);margin:1.1rem 0}
+.prog-l{display:flex;justify-content:space-between;font-family:monospace;font-size:9px;color:var(--mu);margin-bottom:.3rem}.prog-bg{height:3px;background:var(--br2)}.prog-f{height:3px;background:var(--ac);transition:width .4s}
+.bk{display:flex;gap:.65rem;padding:.65rem 0;border-bottom:1px solid var(--br);align-items:flex-start}.bk:last-child{border-bottom:none}.bk-c{font-family:monospace;font-size:8px;color:var(--ac);letter-spacing:.1em;min-width:52px;padding-top:.2rem;flex-shrink:0}.bk-t{font-size:13px;font-weight:500;margin-bottom:.12rem}.bk-d{font-size:11px;color:var(--mu)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="brand">RUTINE</a>
+  <span class="pgtitle">MENTE</span>
+  <div class="spill" id="spill">—</div>
+</header>
+
+<main class="main">
+
+  <!-- MEDITACIÓN -->
+  <div class="lbl">MEDITACIÓN</div>
+  <div class="card">
+    <span class="clbl">TEMPORIZADOR — PROGRAMA PROGRESIVO 4 SEMANAS</span>
+
+    <div style="margin-bottom:.75rem;">
+      <table class="tbl">
+        <thead><tr><th>SEMANA</th><th>DURACIÓN</th><th>TÉCNICA</th></tr></thead>
+        <tbody>
+          <tr><td><span style="color:var(--ac);">SEM 1</span></td><td>5 min</td><td>Enfoque en respiración</td></tr>
+          <tr><td><span style="color:var(--ac);">SEM 2</span></td><td>10 min</td><td>Body scan</td></tr>
+          <tr><td><span style="color:var(--ac);">SEM 3</span></td><td>15 min</td><td>Mindfulness abierto</td></tr>
+          <tr><td><span style="color:var(--ac);">SEM 4+</span></td><td>20+ min</td><td>Meditación compasiva / visualización</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="presets">
+      <button class="ps" onclick="setMed(5)" data-m="5">5 MIN</button>
+      <button class="ps" onclick="setMed(10)" data-m="10">10 MIN</button>
+      <button class="ps" onclick="setMed(15)" data-m="15">15 MIN</button>
+      <button class="ps" onclick="setMed(20)" data-m="20">20 MIN</button>
+    </div>
+
+    <div class="tface" id="med-face">10:00</div>
+
+    <div class="trow">
+      <button class="btn pr" id="med-btn" onclick="toggleMed()">INICIAR</button>
+      <button class="btn" onclick="resetMed()">RESET</button>
+    </div>
+
+    <div id="med-done" style="display:none;text-align:center;font-family:monospace;font-size:9px;color:var(--gn);letter-spacing:.2em;padding:.5rem 0;">✓ SESIÓN COMPLETADA — GUARDADA</div>
+    <div style="font-family:monospace;font-size:9px;color:var(--mu);text-align:center;" id="med-total">Total hoy: 0 min</div>
+  </div>
+
+  <!-- RESPIRACIÓN 4-7-8 -->
+  <div class="card" style="margin-top:.7rem;">
+    <span class="clbl">RESPIRACIÓN 4-7-8 — ANTI-ANSIEDAD</span>
+    <div style="font-size:13px;color:var(--mu);margin-bottom:1rem;">Inhala 4 seg → Retén 7 seg → Exhala 8 seg. Repite 4 rondas. Activa el sistema nervioso parasimpático.</div>
+
+    <div class="tface" id="breath-face" style="font-size:2.8rem;">INICIO</div>
+    <div id="breath-phase" style="text-align:center;font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.2em;margin-bottom:.75rem;">PRESIONA INICIAR</div>
+
+    <div class="trow">
+      <button class="btn pr" id="breath-btn" onclick="toggleBreath()">INICIAR</button>
+      <button class="btn" onclick="resetBreath()">RESET</button>
+    </div>
+    <div id="breath-count" style="text-align:center;font-family:monospace;font-size:9px;color:var(--mu);margin-top:.3rem;">Ronda 0 / 4</div>
+  </div>
+
+  <!-- JOURNALING -->
+  <div class="lbl">JOURNALING</div>
+  <div class="acc open" id="acc-j">
+    <div class="ah" onclick="togAcc('acc-j')">
+      <div class="ah-l"><span class="ah-s">📓</span><span class="ah-t">Diario estructurado — AM + PM</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.65rem;">MAÑANA — 10 MIN ANTES DE DESAYUNAR</div>
+      <div style="display:flex;flex-direction:column;gap:.1rem;">
+        <div class="field">
+          <div class="flbl">01 — 3 COSAS POR LAS QUE SOY AGRADECIDO HOY</div>
+          <textarea id="j-grat" placeholder="Sé específico. No 'mi familia' sino 'la llamada de mi madre ayer que me hizo reír...'"></textarea>
+        </div>
+        <div class="field">
+          <div class="flbl">02 — MI INTENCIÓN PARA HOY</div>
+          <textarea id="j-int" placeholder="Una sola cosa que, si la logro, este día habrá valido. ¿Cómo quiero sentirme? ¿Qué tipo de persona elijo ser hoy?"></textarea>
+        </div>
+        <div class="field">
+          <div class="flbl">03 — AFIRMACIÓN DEL DÍA</div>
+          <textarea id="j-afirm" placeholder="Escribe en presente: 'Soy alguien que...' / 'Tengo la capacidad de...' / 'Me merezco...'" style="min-height:60px;"></textarea>
+        </div>
+      </div>
+      <button class="btn pr" onclick="saveJournalAM()" style="width:100%;margin-top:.75rem;">GUARDAR MAÑANA</button>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.65rem;">NOCHE — 10 MIN ANTES DE LEER</div>
+      <div style="display:flex;flex-direction:column;gap:.1rem;">
+        <div class="field">
+          <div class="flbl">01 — 3 LOGROS DE HOY (por pequeños que sean)</div>
+          <textarea id="j-logros" placeholder="No filtes. Terminé el gym, comí bien, hice una llamada difícil... Todo cuenta."></textarea>
+        </div>
+        <div class="field">
+          <div class="flbl">02 — ¿QUÉ PODRÍA HABER HECHO MEJOR?</div>
+          <textarea id="j-mejor" placeholder="Sin auto-juicio. Solo observación. ¿Qué haría diferente mañana?"></textarea>
+        </div>
+        <div class="field">
+          <div class="flbl">03 — REFLEXIÓN LIBRE</div>
+          <textarea id="j-libre" placeholder="Lo que sea. Pensamiento sin censura. Procesa el día." class="textarea-tall"></textarea>
+        </div>
+      </div>
+      <button class="btn pr" onclick="saveJournalPM()" style="width:100%;margin-top:.75rem;">GUARDAR NOCHE</button>
+      <div id="journal-status" style="text-align:center;font-family:monospace;font-size:9px;color:var(--gn);margin-top:.5rem;display:none;">✓ GUARDADO</div>
+    </div>
+  </div>
+
+  <!-- LECTURA -->
+  <div class="lbl">LECTURA</div>
+  <div class="acc" id="acc-read">
+    <div class="ah" onclick="togAcc('acc-read')">
+      <div class="ah-l"><span class="ah-s">📚</span><span class="ah-t">Tracker de lectura — 20 min / día</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="field" style="padding:.5rem 0;border-bottom:none;margin-bottom:.75rem;">
+        <div class="flbl">LIBRO ACTUAL</div>
+        <input type="text" id="book-current" placeholder="Título del libro..." oninput="saveBook()">
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">TEMPORIZADOR 20 MIN</div>
+      <div class="tface" id="read-face">20:00</div>
+      <div class="trow">
+        <button class="btn pr" id="read-btn" onclick="toggleRead()">INICIAR</button>
+        <button class="btn" onclick="resetRead()">RESET</button>
+      </div>
+      <div id="read-total" style="text-align:center;font-family:monospace;font-size:9px;color:var(--mu);margin-top:.3rem;">Minutos leídos hoy: 0</div>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.65rem;">LISTA DE LECTURA POR CATEGORÍA</div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.12em;margin-bottom:.4rem;">FILOSOFÍA / ESTOICISMO</div>
+      <div style="display:flex;flex-direction:column;">
+        <div class="bk"><div class="bk-c">SÉNECA</div><div><div class="bk-t">Cartas a Lucilio</div><div class="bk-d">El manual del estoicismo práctico. Empieza aquí.</div></div></div>
+        <div class="bk"><div class="bk-c">MARCO AUR.</div><div><div class="bk-t">Meditaciones</div><div class="bk-d">Diario privado del mejor gobernante-filósofo de Roma.</div></div></div>
+        <div class="bk"><div class="bk-c">EPICTETO</div><div><div class="bk-t">El Enquiridión</div><div class="bk-d">100 páginas que cambian la perspectiva. Corto, denso.</div></div></div>
+        <div class="bk"><div class="bk-c">NIETZSCHE</div><div><div class="bk-t">Así habló Zaratustra</div><div class="bk-d">Voluntad de poder, superación, vida afirmada.</div></div></div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.12em;margin:.75rem 0 .4rem;">PSICOLOGÍA / MENTE</div>
+      <div style="display:flex;flex-direction:column;">
+        <div class="bk"><div class="bk-c">FRANKL</div><div><div class="bk-t">El Hombre en Busca de Sentido</div><div class="bk-d">Propósito y resiliencia. Imprescindible.</div></div></div>
+        <div class="bk"><div class="bk-c">CSIKSZENT.</div><div><div class="bk-t">Flow — La Psicología de la Experiencia Óptima</div><div class="bk-d">Cómo entrar en estado de flujo a voluntad.</div></div></div>
+        <div class="bk"><div class="bk-c">HUBERMAN</div><div><div class="bk-t">Dopamine Nation (Anna Lembke)</div><div class="bk-d">La neurociencia del placer, el dolor y la dopamina.</div></div></div>
+        <div class="bk"><div class="bk-c">CIALDINI</div><div><div class="bk-t">Influencia — La Psicología de la Persuasión</div><div class="bk-d">6 principios que mueven la conducta humana.</div></div></div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.12em;margin:.75rem 0 .4rem;">NEGOCIOS / FINANZAS</div>
+      <div style="display:flex;flex-direction:column;">
+        <div class="bk"><div class="bk-c">MORGAN</div><div><div class="bk-t">La Psicología del Dinero</div><div class="bk-d">Por qué nuestro comportamiento importa más que el IQ financiero.</div></div></div>
+        <div class="bk"><div class="bk-c">GRAHAM</div><div><div class="bk-t">El Inversor Inteligente</div><div class="bk-d">La biblia del value investing. Capítulos 8 y 20 son suficientes.</div></div></div>
+        <div class="bk"><div class="bk-c">HOLIDAY</div><div><div class="bk-t">El Obstáculo es el Camino</div><div class="bk-d">Estoicismo aplicado a emprender y crecer.</div></div></div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.12em;margin:.75rem 0 .4rem;">FICCIÓN (descanso cognitivo)</div>
+      <div style="display:flex;flex-direction:column;">
+        <div class="bk"><div class="bk-c">DOSTOIEV.</div><div><div class="bk-t">Crimen y Castigo</div><div class="bk-d">Psicología profunda. Confronta tus contradicciones.</div></div></div>
+        <div class="bk"><div class="bk-c">CAMUS</div><div><div class="bk-t">El Extranjero</div><div class="bk-d">Absurdismo. Leerlo en 2 horas, pensarlo el resto de tu vida.</div></div></div>
+        <div class="bk"><div class="bk-c">ORWELL</div><div><div class="bk-t">1984</div><div class="bk-d">Poder, verdad, control. Más relevante que nunca.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTOICISMO -->
+  <div class="acc" id="acc-stoic">
+    <div class="ah" onclick="togAcc('acc-stoic')">
+      <div class="ah-l"><span class="ah-s">⚖️</span><span class="ah-t">Estoicismo práctico</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="qt"><p>"No busques que los eventos sucedan como tú quieres, sino quiere que los eventos sucedan como son, y tendrás paz."</p><cite>— EPICTETO</cite></div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin:.75rem 0 .5rem;">LAS 3 DISCIPLINAS ESTOICAS</div>
+      <div class="steps">
+        <div class="step">
+          <div class="stn">I</div>
+          <div class="stb">
+            <h4>Disciplina del Deseo — Control de lo que quieres</h4>
+            <p>Solo desear lo que está bajo tu control. Indiferencia ante lo externo.<br><span style="color:var(--ac);font-size:11px;">Ejercicio diario: antes de reaccionar, pregunta "¿está esto bajo mi control?"</span></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="stn">II</div>
+          <div class="stb">
+            <h4>Disciplina de la Acción — Cómo actúas con otros</h4>
+            <p>Actuar en beneficio de la comunidad, con reserva (saber que puede no salir bien).<br><span style="color:var(--ac);font-size:11px;">Ejercicio: da lo mejor de ti en cada interacción sin expectativa de resultado.</span></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="stn">III</div>
+          <div class="stb">
+            <h4>Disciplina del Asentimiento — Qué aceptas como verdad</h4>
+            <p>No dejarse llevar por impresiones. Pausar antes de juzgar.<br><span style="color:var(--ac);font-size:11px;">Ejercicio: cuando te irrite algo, di "esto es solo una impresión, no la realidad".</span></p>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">PRÁCTICA DIARIA — 5 MIN</div>
+      <div class="rules">
+        <div class="rule"><strong>Mañana:</strong> ¿Qué dificultades podría encontrar hoy? ¿Cómo respondería un hombre virtuoso?</div>
+        <div class="rule"><strong>Tarde:</strong> Memento mori — recuerda tu mortalidad. ¿Estoy usando mi tiempo bien?</div>
+        <div class="rule"><strong>Noche:</strong> ¿En qué fallé hoy? ¿En qué mejoré? No para culparte, sino para aprender.</div>
+        <div class="rule"><strong>Premeditatio malorum:</strong> Visualiza el peor escenario posible. Hace lo demás llevadero.</div>
+        <div class="rule"><strong>Amor fati:</strong> No solo aceptar lo que pasa, sino amarlo activamente.</div>
+      </div>
+
+      <div class="field" style="margin-top:.75rem;">
+        <div class="flbl">REFLEXIÓN ESTOICA DEL DÍA</div>
+        <textarea id="stoic-j" placeholder="¿En qué situación perdiste el control hoy? ¿Cómo reaccionaría Marco Aurelio?"></textarea>
+      </div>
+      <button class="btn pr" onclick="saveStoic()" style="width:100%;margin-top:.5rem;">GUARDAR</button>
+    </div>
+  </div>
+
+  <!-- DOPAMINA -->
+  <div class="acc" id="acc-dop">
+    <div class="ah" onclick="togAcc('acc-dop')">
+      <div class="ah-l"><span class="ah-s">🧠</span><span class="ah-t">Control de dopamina</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">EL PROBLEMA</div>
+      <p style="font-size:13px;color:var(--mu);margin-bottom:.75rem;">La dopamina no es el químico del placer — es el del deseo y la anticipación. El scroll, pornografía, azúcar, videojuegos y notificaciones constantes saturan el sistema dopaminérgico. Resultado: nada de la vida real se siente satisfactorio.</p>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">PROTOCOLO DE RESTAURACIÓN</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Ninguna recompensa de alta dopamina antes de las 12:00 (sin redes sociales en la mañana)</div>
+        <div class="rule">30 min mínimo de actividad difícil antes de cualquier placer fácil (gym, lectura, trabajo profundo)</div>
+        <div class="rule">Eliminar notificaciones. Revisar mensajes en ventanas de tiempo definidas (12:00 y 18:00)</div>
+        <div class="rule">Sin contenido pasivo por más de 30 min continuos. Alterna con creación o movimiento</div>
+        <div class="rule">Desintoxicación dopaminérgica 1x/mes: 24-48h sin pantallas recreativas</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">REGLAS DE REDES SOCIALES</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Instagram: máx 20 min/día. Sin scroll infinito — usa lista de favoritos</div>
+        <div class="rule">No revisar el teléfono en las primeras 2h del día ni las últimas 1h</div>
+        <div class="rule">Modo blanco y negro en teléfono — reduce compulsividad visual</div>
+        <div class="rule">Limitar apps en primera pantalla. Lo que no ves no lo abres automáticamente</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">TRACKER OPCIONAL — NO-FAP / ABSTENCIÓN</div>
+      <div class="card" style="background:var(--s3);border:1px solid var(--br);">
+        <div id="nofap-days" style="font-family:monospace;font-size:2.5rem;color:var(--tx);text-align:center;padding:.5rem 0;">0 días</div>
+        <div id="nofap-since" style="text-align:center;font-family:monospace;font-size:9px;color:var(--mu);margin-bottom:.75rem;">No iniciado</div>
+        <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn pr" onclick="startNofap()" id="nofap-start-btn">INICIAR CONTADOR</button>
+          <button class="btn rd" onclick="resetNofap()">REINICIAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISUALIZACIÓN -->
+  <div class="acc" id="acc-vis">
+    <div class="ah" onclick="togAcc('acc-vis')">
+      <div class="ah-l"><span class="ah-s">🎯</span><span class="ah-t">Visualización guiada — 5 min</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <p style="font-size:13px;color:var(--mu);margin-bottom:1rem;">Realiza esto cada mañana después de meditar. Cierra los ojos. Sigue el guión mentalmente.</p>
+      <div class="steps">
+        <div class="step"><div class="stn">1</div><div class="stb"><h4>Respira profundo × 3</h4><p>Inhala completamente, exhala despacio. Relaja el cuerpo. Cierra los ojos.</p></div></div>
+        <div class="step"><div class="stn">2</div><div class="stb"><h4>Visualiza tu yo ideal en 5 años</h4><p>¿Cómo te ves físicamente? ¿Dónde estás? ¿Qué tienes? ¿Cómo se sienten las personas a tu alrededor cuando estás presente? Sé tan específico como puedas.</p></div></div>
+        <div class="step"><div class="stn">3</div><div class="stb"><h4>Visualiza el éxito de HOY</h4><p>Ve mentalmente cómo completas tu gym. Cómo terminas la tarea difícil. Cómo rechazas el azúcar. Cómo te duermes a tiempo. Película corta, en positivo.</p></div></div>
+        <div class="step"><div class="stn">4</div><div class="stb"><h4>Siente la emoción</h4><p>La visualización solo funciona con emoción real. No solo visualices, SIENTE el orgullo, la energía, la satisfacción. El cerebro no distingue bien entre real e imaginado con emoción.</p></div></div>
+        <div class="step"><div class="stn">5</div><div class="stb"><h4>Ancla con una frase</h4><p>Di internamente: "Soy exactamente la persona que necesita hacer lo que voy a hacer hoy." Abre los ojos y actúa.</p></div></div>
+      </div>
+
+      <div class="field" style="margin-top:.75rem;">
+        <div class="flbl">MI VISIÓN — ESCRIBE AQUÍ (persiste)</div>
+        <textarea id="vision-text" placeholder="Describe tu vida ideal en 5 años con máximo detalle. Presente. Primera persona. Detalles sensoriales..." class="textarea-tall"></textarea>
+      </div>
+      <button class="btn pr" onclick="saveVision()" style="width:100%;margin-top:.5rem;">GUARDAR VISIÓN</button>
+    </div>
+  </div>
+
+  <!-- AFIRMACIONES -->
+  <div class="acc" id="acc-afirm">
+    <div class="ah" onclick="togAcc('acc-afirm')">
+      <div class="ah-l"><span class="ah-s">💬</span><span class="ah-t">Afirmaciones psicológicas</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <p style="font-size:13px;color:var(--mu);margin-bottom:1rem;">Lee estas en voz alta cada mañana. La repetición activa el córtex prefrontal y reentraîna tus creencias sobre ti mismo.</p>
+      <div style="display:flex;flex-direction:column;gap:.6rem;" id="affirmations-list">
+        <div class="qt"><p>"Soy alguien que avanza aunque no tenga ganas. La acción crea la motivación, no al revés."</p></div>
+        <div class="qt"><p>"Mi cuerpo responde a lo que le exijo. Cada entrenamiento es una declaración de quién elijo ser."</p></div>
+        <div class="qt"><p>"El malestar temporal construye la versión permanente de mí que quiero ser."</p></div>
+        <div class="qt"><p>"Tengo la capacidad de controlar mis pensamientos y por lo tanto mis resultados."</p></div>
+        <div class="qt"><p>"La disciplina es libertad. Cada vez que cumplo, me libero de quien no quiero ser."</p></div>
+        <div class="qt"><p>"Soy el producto de mis hábitos, y mis hábitos son una elección consciente."</p></div>
+        <div class="qt"><p>"No compito con nadie más. Mi única competencia es la versión de mí de ayer."</p></div>
+      </div>
+
+      <div class="field" style="margin-top:.75rem;">
+        <div class="flbl">MIS AFIRMACIONES PERSONALES</div>
+        <textarea id="my-affirmations" placeholder="Escribe tus propias afirmaciones. En presente. Específicas para tus metas..." class="textarea-tall"></textarea>
+      </div>
+      <button class="btn pr" onclick="saveAffirmations()" style="width:100%;margin-top:.5rem;">GUARDAR MIS AFIRMACIONES</button>
+    </div>
+  </div>
+
+</main>
+
+<nav class="botnav">
+  <a href="index.html" class="bn"><span class="bns">◈</span><span>HOY</span></a>
+  <a href="fisico.html" class="bn"><span class="bns">◉</span><span>FÍSICO</span></a>
+  <a href="mental.html" class="bn on"><span class="bns">◎</span><span>MENTE</span></a>
+  <a href="economico-social.html" class="bn"><span class="bns">◆</span><span>DINERO</span></a>
+  <a href="relacion.html" class="bn"><span class="bns">○</span><span>AMOR</span></a>
+</nav>
+
+<script>
+const R={
+  today:()=>new Date().toISOString().slice(0,10),
+  get:(k,d=null)=>{try{return JSON.parse(localStorage.getItem('rt_'+k))??d}catch{return d}},
+  set:(k,v)=>{try{localStorage.setItem('rt_'+k,JSON.stringify(v))}catch{}},
+  getDay:()=>R.get('d_'+R.today(),{}),
+  setDay:(p)=>{const k='d_'+R.today();const d=R.get(k,{});R.set(k,{...d,...p})}
+};
+function togAcc(id){document.getElementById(id).classList.toggle('open');}
+
+// ── Meditation Timer ──────────────────────────────────
+let medSecs=600,medRunning=false,medInterval=null,medMins=10;
+function setMed(m){
+  document.querySelectorAll('.ps[data-m]').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`.ps[data-m="${m}"]`)?.classList.add('on');
+  medMins=m;medSecs=m*60;medRunning=false;
+  clearInterval(medInterval);
+  document.getElementById('med-btn').textContent='INICIAR';
+  document.getElementById('med-done').style.display='none';
+  renderMed();
+}
+function renderMed(){
+  const m=Math.floor(medSecs/60);const s=medSecs%60;
+  document.getElementById('med-face').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function toggleMed(){
+  if(medRunning){clearInterval(medInterval);medRunning=false;document.getElementById('med-btn').textContent='CONTINUAR';}
+  else{
+    medRunning=true;document.getElementById('med-btn').textContent='PAUSAR';
+    medInterval=setInterval(()=>{
+      medSecs--;renderMed();
+      if(medSecs<=0){clearInterval(medInterval);medRunning=false;
+        document.getElementById('med-btn').textContent='INICIAR';
+        document.getElementById('med-done').style.display='block';
+        const prevMins=R.getDay().meditation_mins||0;
+        R.setDay({meditation_mins:prevMins+medMins,meditation_done:true});
+        document.getElementById('med-total').textContent=`Total hoy: ${prevMins+medMins} min`;
+        document.getElementById('spill').textContent='✓';
+        if(navigator.vibrate)navigator.vibrate([200,100,200]);
+      }
+    },1000);
+  }
+}
+function resetMed(){clearInterval(medInterval);medRunning=false;medSecs=medMins*60;document.getElementById('med-btn').textContent='INICIAR';document.getElementById('med-done').style.display='none';renderMed();}
+
+// ── Breathing 4-7-8 ──────────────────────────────────
+let breathRunning=false,breathInterval=null,breathRound=0;
+const PHASES=[{name:'INHALA',dur:4},{name:'RETÉN',dur:7},{name:'EXHALA',dur:8}];
+let phaseIdx=0,phaseSecs=4;
+function renderBreath(){
+  const p=PHASES[phaseIdx];
+  document.getElementById('breath-face').textContent=phaseSecs;
+  document.getElementById('breath-phase').textContent=p.name;
+}
+function toggleBreath(){
+  if(breathRunning){clearInterval(breathInterval);breathRunning=false;document.getElementById('breath-btn').textContent='CONTINUAR';}
+  else{
+    breathRunning=true;document.getElementById('breath-btn').textContent='PAUSAR';
+    breathInterval=setInterval(()=>{
+      phaseSecs--;
+      if(phaseSecs<=0){
+        phaseIdx=(phaseIdx+1)%3;
+        if(phaseIdx===0){breathRound++;document.getElementById('breath-count').textContent=`Ronda ${breathRound} / 4`;}
+        phaseSecs=PHASES[phaseIdx].dur;
+        if(breathRound>=4){clearInterval(breathInterval);breathRunning=false;document.getElementById('breath-btn').textContent='LISTO';document.getElementById('breath-phase').textContent='COMPLETADO ✓';return;}
+      }
+      renderBreath();
+    },1000);
+  }
+}
+function resetBreath(){clearInterval(breathInterval);breathRunning=false;breathRound=0;phaseIdx=0;phaseSecs=4;document.getElementById('breath-btn').textContent='INICIAR';document.getElementById('breath-face').textContent='INICIO';document.getElementById('breath-phase').textContent='PRESIONA INICIAR';document.getElementById('breath-count').textContent='Ronda 0 / 4';}
+
+// ── Reading Timer ─────────────────────────────────────
+let readSecs=1200,readRunning=false,readInterval=null;
+function renderRead(){const m=Math.floor(readSecs/60);const s=readSecs%60;document.getElementById('read-face').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+function toggleRead(){
+  if(readRunning){clearInterval(readInterval);readRunning=false;document.getElementById('read-btn').textContent='CONTINUAR';}
+  else{
+    readRunning=true;document.getElementById('read-btn').textContent='PAUSAR';
+    readInterval=setInterval(()=>{
+      readSecs--;renderRead();
+      if(readSecs<=0){clearInterval(readInterval);readRunning=false;document.getElementById('read-btn').textContent='LISTO';
+        const prevMins=R.getDay().read_mins||0;const newTotal=prevMins+20;
+        R.setDay({read_mins:newTotal});document.getElementById('read-total').textContent=`Minutos leídos hoy: ${newTotal}`;
+      }
+    },1000);
+  }
+}
+function resetRead(){clearInterval(readInterval);readRunning=false;readSecs=1200;document.getElementById('read-btn').textContent='INICIAR';renderRead();}
+
+// ── Journaling ────────────────────────────────────────
+function saveJournalAM(){
+  R.setDay({
+    j_grat:document.getElementById('j-grat').value,
+    j_int:document.getElementById('j-int').value,
+    j_afirm:document.getElementById('j-afirm').value
+  });
+  showSaved();
+}
+function saveJournalPM(){
+  R.setDay({
+    j_logros:document.getElementById('j-logros').value,
+    j_mejor:document.getElementById('j-mejor').value,
+    j_libre:document.getElementById('j-libre').value
+  });
+  showSaved();
+}
+function showSaved(){const el=document.getElementById('journal-status');el.style.display='block';setTimeout(()=>el.style.display='none',2000);}
+
+// ── Stoicism ──────────────────────────────────────────
+function saveStoic(){R.setDay({stoic_j:document.getElementById('stoic-j').value});alert('Reflexión guardada.');}
+
+// ── No-fap tracker ────────────────────────────────────
+function updateNofapDisplay(){
+  const s=R.get('mental',{});
+  if(s.nofap_active&&s.nofap_start){
+    const days=Math.floor((Date.now()-new Date(s.nofap_start).getTime())/(86400000));
+    document.getElementById('nofap-days').textContent=days+' días';
+    document.getElementById('nofap-since').textContent='Desde: '+new Date(s.nofap_start).toLocaleDateString('es');
+    document.getElementById('nofap-start-btn').textContent='ACTIVO ✓';
+    document.getElementById('nofap-start-btn').classList.add('pr');
+  }
+}
+function startNofap(){
+  if(R.get('mental',{}).nofap_active){alert('Ya tienes un contador activo.');return;}
+  R.set('mental',{...R.get('mental',{}),nofap_start:new Date().toISOString(),nofap_active:true});
+  updateNofapDisplay();
+}
+function resetNofap(){
+  if(confirm('¿Reiniciar contador?')){
+    R.set('mental',{...R.get('mental',{}),nofap_start:null,nofap_active:false});
+    document.getElementById('nofap-days').textContent='0 días';
+    document.getElementById('nofap-since').textContent='No iniciado';
+    document.getElementById('nofap-start-btn').textContent='INICIAR CONTADOR';
+  }
+}
+
+// ── Persistence ───────────────────────────────────────
+function saveVision(){R.set('vision',document.getElementById('vision-text').value);alert('Visión guardada.');}
+function saveAffirmations(){R.set('my_affirmations',document.getElementById('my-affirmations').value);alert('Afirmaciones guardadas.');}
+function saveBook(){R.set('current_book',document.getElementById('book-current').value);}
+
+// ── Init ──────────────────────────────────────────────
+setMed(10);
+renderRead();
+const d=R.getDay();
+if(d.j_grat)document.getElementById('j-grat').value=d.j_grat;
+if(d.j_int)document.getElementById('j-int').value=d.j_int;
+if(d.j_afirm)document.getElementById('j-afirm').value=d.j_afirm;
+if(d.j_logros)document.getElementById('j-logros').value=d.j_logros;
+if(d.j_mejor)document.getElementById('j-mejor').value=d.j_mejor;
+if(d.j_libre)document.getElementById('j-libre').value=d.j_libre;
+if(d.stoic_j)document.getElementById('stoic-j').value=d.stoic_j;
+if(d.meditation_mins)document.getElementById('med-total').textContent=`Total hoy: ${d.meditation_mins} min`;
+if(d.read_mins)document.getElementById('read-total').textContent=`Minutos leídos hoy: ${d.read_mins}`;
+const vision=R.get('vision');if(vision)document.getElementById('vision-text').value=vision;
+const myAff=R.get('my_affirmations');if(myAff)document.getElementById('my-affirmations').value=myAff;
+const book=R.get('current_book');if(book)document.getElementById('book-current').value=book;
+updateNofapDisplay();
+</script>
+</body>
+</html>

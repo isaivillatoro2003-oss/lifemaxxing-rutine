@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>RUTINE — Físico</title>
+<style>
+:root{--bg:#090909;--s1:#0f0f0f;--s2:#141414;--s3:#1a1a1a;--br:#1d1d1d;--br2:#272727;--tx:#e0e0e0;--mu:#505050;--mu2:#2e2e2e;--ac:#c9a96e;--ac2:#7a6040;--ac3:#e8d4a0;--rd:#c0392b;--gn:#27ae60}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);font-family:-apple-system,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;min-height:100vh;padding-bottom:72px}a{color:inherit;text-decoration:none}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(9,9,9,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--br);display:flex;align-items:center;padding:0 1.25rem;height:52px;gap:1rem}
+.brand{font-family:monospace;font-size:10px;letter-spacing:.42em;color:var(--ac);flex-shrink:0}
+.pgtitle{font-family:monospace;font-size:9px;letter-spacing:.22em;color:var(--mu);text-transform:uppercase;flex:1}
+.spill{font-family:monospace;font-size:11px;background:var(--ac);color:var(--bg);padding:.2rem .6rem;min-width:46px;text-align:center;flex-shrink:0}
+.botnav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(9,9,9,.97);border-top:1px solid var(--br);display:flex;height:72px;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--mu);transition:color .15s;cursor:pointer;font-family:monospace;font-size:8.5px;letter-spacing:.1em;border:none;background:none;position:relative;padding:0}
+.bn::after{content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;background:transparent;transition:background .15s}
+.bn.on{color:var(--ac)}.bn.on::after{background:var(--ac)}.bns{font-size:16px;line-height:1}
+@media(min-width:768px){body{padding-bottom:0;padding-left:196px}.topbar{left:196px}.botnav{width:196px;top:0;bottom:0;left:0;right:auto;height:auto;flex-direction:column;justify-content:flex-start;border-top:none;border-right:1px solid var(--br);padding:52px 0 0}.bn{flex:none;flex-direction:row;justify-content:flex-start;gap:.7rem;padding:.9rem 1.25rem;font-size:11px;width:100%}.bn::after{top:0;bottom:0;left:0;right:auto;width:2px;height:auto}.bns{font-size:14px}}
+.main{max-width:700px;margin:0 auto;padding:1.5rem 1.25rem}
+.lbl{font-family:monospace;font-size:8.5px;letter-spacing:.28em;color:var(--mu);text-transform:uppercase;margin:1.75rem 0 .7rem}.lbl:first-child{margin-top:0}
+.card{background:var(--s1);border:1px solid var(--br);padding:1rem;margin-bottom:.7rem}
+.clbl{font-family:monospace;font-size:8px;letter-spacing:.24em;color:var(--ac);text-transform:uppercase;display:block;margin-bottom:.7rem}
+.acc{margin-bottom:.4rem}
+.ah{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem;background:var(--s1);border:1px solid var(--br);cursor:pointer;user-select:none;min-height:52px;transition:background .15s}
+.ah:hover,.ah:active{background:var(--s2)}.ah-l{display:flex;align-items:center;gap:.65rem}.ah-s{font-size:14px}.ah-t{font-size:14px;font-weight:500}.ah-a{font-family:monospace;font-size:10px;color:var(--mu);transition:transform .2s;flex-shrink:0}.acc.open .ah-a{transform:rotate(90deg)}.ab{display:none;background:var(--s2);border:1px solid var(--br);border-top:none;padding:1rem}.acc.open .ab{display:block}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}.tbl th{font-family:monospace;font-size:8px;letter-spacing:.16em;color:var(--mu);text-transform:uppercase;text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--br)}.tbl td{padding:.65rem .7rem;border-bottom:1px solid var(--br);vertical-align:top}.tbl tr:last-child td{border-bottom:none}.tbl tbody tr:hover td{background:var(--s3)}
+.tag{font-family:monospace;font-size:8px;color:var(--ac);letter-spacing:.08em}
+.dsel{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:1rem}.ds{padding:.45rem .9rem;background:transparent;border:1px solid var(--br2);color:var(--mu);font-family:monospace;font-size:9px;letter-spacing:.12em;cursor:pointer;min-height:40px;transition:all .15s}.ds.on{background:var(--ac);border-color:var(--ac);color:var(--bg)}
+.steps{display:flex;flex-direction:column}.step{display:flex;gap:.7rem;padding:.75rem 0;border-bottom:1px solid var(--br)}.step:last-child{border-bottom:none}.stn{font-family:monospace;font-size:9px;color:var(--ac);min-width:20px;padding-top:.15rem;flex-shrink:0}.stb h4{font-size:13px;font-weight:500;margin-bottom:.2rem}.stb p{font-size:12px;color:var(--mu);line-height:1.5}
+.rules{display:grid;gap:.38rem}.rule{font-size:13px;color:var(--mu);padding-left:1.1rem;position:relative;line-height:1.5}.rule::before{content:'—';position:absolute;left:0;color:var(--ac2);font-family:monospace}
+.mg{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;margin:.65rem 0}@media(min-width:400px){.mg{grid-template-columns:repeat(4,1fr)}}.mc{text-align:center}.mv{font-family:monospace;font-size:1.5rem;color:var(--tx)}.ml{font-family:monospace;font-size:8px;color:var(--mu);letter-spacing:.13em;text-transform:uppercase}
+.mi{background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--tx);font-family:monospace;font-size:1.5rem;width:100%;text-align:center;outline:none;-webkit-appearance:none}.mi:focus{border-bottom-color:var(--ac)}
+.prog-l{display:flex;justify-content:space-between;font-family:monospace;font-size:9px;color:var(--mu);margin-bottom:.3rem}.prog-bg{height:3px;background:var(--br2)}.prog-f{height:3px;background:var(--ac);transition:width .4s}
+.btn{padding:.6rem 1.2rem;background:transparent;border:1px solid var(--br2);color:var(--tx);font-family:monospace;font-size:9px;letter-spacing:.18em;cursor:pointer;min-height:44px;transition:all .15s;text-transform:uppercase}.btn:active,.btn:hover{background:var(--s2)}.btn.pr{border-color:var(--ac);color:var(--ac)}.btn.pr:active,.btn.pr:hover{background:var(--ac);color:var(--bg)}
+.field{display:flex;flex-direction:column;gap:.35rem;padding:.75rem 0;border-bottom:1px solid var(--br)}.field:last-child{border-bottom:none}.flbl{font-family:monospace;font-size:9px;letter-spacing:.16em;color:var(--mu);text-transform:uppercase}
+input[type=number],input[type=text]{background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--tx);font-size:15px;font-family:inherit;width:100%;outline:none;padding:.25rem 0;-webkit-appearance:none}input:focus{border-bottom-color:var(--ac)}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.5rem 0}.chip{font-family:monospace;font-size:9px;color:var(--mu);border:1px solid var(--br2);padding:.2rem .55rem}.chip.ac{border-color:var(--ac2);color:var(--ac)}
+.water-c{display:flex;gap:.3rem;align-items:center;justify-content:center;margin-top:.35rem}.wb-b{background:var(--s3);border:1px solid var(--br);color:var(--mu);width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s}.wb-b:hover,.wb-b:active{color:var(--ac);border-color:var(--ac)}
+hr{border:none;border-top:1px solid var(--br);margin:1.1rem 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}@media(max-width:380px){.g2{grid-template-columns:1fr}}
+.skin-step{display:flex;gap:.75rem;padding:.7rem 0;border-bottom:1px solid var(--br);align-items:flex-start}.skin-step:last-child{border-bottom:none}.skin-num{font-family:monospace;font-size:9px;color:var(--ac);min-width:18px;flex-shrink:0;padding-top:.2rem}.skin-b h4{font-size:13px;font-weight:500;margin-bottom:.15rem}.skin-b .why{font-size:11px;color:var(--mu)}.skin-b .prod{font-family:monospace;font-size:9px;color:var(--ac2);letter-spacing:.06em}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="brand">RUTINE</a>
+  <span class="pgtitle">FÍSICO</span>
+  <div class="spill" id="spill">—</div>
+</header>
+
+<main class="main">
+
+  <!-- DAILY TRACKER -->
+  <div class="lbl">TRACKER DIARIO</div>
+  <div class="card">
+    <span class="clbl">HOY — REGISTRA ANTES DE DORMIR</span>
+    <div class="mg">
+      <div class="mc"><div class="ml">KCAL</div><input class="mi" id="t-cal" type="number" placeholder="0" oninput="saveTracker()"></div>
+      <div class="mc"><div class="ml">PROTEÍNA g</div><input class="mi" id="t-prot" type="number" placeholder="0" oninput="saveTracker()"></div>
+      <div class="mc"><div class="ml">AGUA ml</div><input class="mi" id="t-agua" type="number" placeholder="0" oninput="saveTracker()"></div>
+      <div class="mc"><div class="ml">PASOS</div><input class="mi" id="t-steps" type="number" placeholder="0" oninput="saveTracker()"></div>
+    </div>
+    <div class="mg" style="margin-top:.5rem;">
+      <div class="mc"><div class="ml">SUEÑO h</div><input class="mi" id="t-sleep" type="number" step=".5" placeholder="0" oninput="saveTracker()"></div>
+      <div class="mc"><div class="ml">PESO kg</div><input class="mi" id="t-peso" type="number" step=".1" placeholder="0" oninput="saveTracker()"></div>
+      <div class="mc"><div class="ml">GYM ✓</div><div style="padding-top:.4rem;"><input type="checkbox" id="t-gym" onchange="saveTracker()" style="width:22px;height:22px;accent-color:var(--ac);cursor:pointer;"></div></div>
+      <div class="mc"><div class="ml">CARDIO ✓</div><div style="padding-top:.4rem;"><input type="checkbox" id="t-cardio" onchange="saveTracker()" style="width:22px;height:22px;accent-color:var(--ac);cursor:pointer;"></div></div>
+    </div>
+    <hr>
+    <div style="display:grid;gap:.4rem;">
+      <div class="prog-l"><span>CALORÍAS</span><span id="cal-lbl">0 / 2000</span></div>
+      <div class="prog-bg"><div class="prog-f" id="cal-bar" style="width:0%"></div></div>
+      <div class="prog-l" style="margin-top:.4rem;"><span>PROTEÍNA</span><span id="prot-lbl">0 / 180g</span></div>
+      <div class="prog-bg"><div class="prog-f" id="prot-bar" style="width:0%;background:var(--gn)"></div></div>
+    </div>
+  </div>
+
+  <!-- NUTRICIÓN -->
+  <div class="lbl">NUTRICIÓN</div>
+  <div class="acc open" id="acc-nut">
+    <div class="ah" onclick="togAcc('acc-nut')">
+      <div class="ah-l"><span class="ah-s">🍽</span><span class="ah-t">Plan alimenticio — Aggressive Cut 500 kcal</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="chips" style="margin-bottom:.75rem;">
+        <span class="chip ac">2000 KCAL / DÍA</span>
+        <span class="chip ac">180g PROTEÍNA</span>
+        <span class="chip ac">180g CARBS</span>
+        <span class="chip ac">60g GRASA</span>
+        <span class="chip">DÉFICIT ~500 KCAL</span>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">CALCULADORA DE MACROS</div>
+      <div class="g2" style="margin-bottom:.75rem;">
+        <div class="field" style="padding:.5rem 0;"><div class="flbl">PESO CORPORAL (kg)</div><input type="number" id="calc-peso" placeholder="75" oninput="calcMacros()"></div>
+        <div class="field" style="padding:.5rem 0;"><div class="flbl">OBJETIVO</div><select id="calc-obj" onchange="calcMacros()" style="background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--tx);font-size:15px;outline:none;width:100%;padding:.25rem 0;"><option value="cut" style="background:#111;">Definición</option><option value="bulk" style="background:#111;">Volumen</option><option value="maint" style="background:#111;">Mantenimiento</option></select></div>
+      </div>
+      <div id="macro-result" style="background:var(--s3);border:1px solid var(--br);padding:.75rem;margin-bottom:1rem;font-family:monospace;font-size:12px;color:var(--mu);">Ingresa tu peso para calcular.</div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin:.75rem 0 .5rem;">COMIDAS DEL DÍA</div>
+      <table class="tbl">
+        <thead><tr><th>HORA</th><th>COMIDA</th><th>KCAL</th><th>P/C/G</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag">06:30</span></td><td><strong>Desayuno</strong><br>4 huevos + 150g avena + 200g fruta</td><td>550</td><td>40/60/18</td></tr>
+          <tr><td><span class="tag">10:00</span></td><td><strong>Pre-gym</strong><br>30g whey + 1 plátano + café negro</td><td>280</td><td>28/35/3</td></tr>
+          <tr><td><span class="tag">12:30</span></td><td><strong>Almuerzo</strong><br>200g pechuga + 150g arroz integral + ensalada verde</td><td>550</td><td>55/55/8</td></tr>
+          <tr><td><span class="tag">16:00</span></td><td><strong>Snack</strong><br>200g requesón / cottage + 30g nueces</td><td>320</td><td>30/8/20</td></tr>
+          <tr><td><span class="tag">19:30</span></td><td><strong>Cena</strong><br>200g salmón / atún + verduras salteadas + aguacate ½</td><td>450</td><td>42/15/22</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.65rem;font-family:monospace;font-size:9px;color:var(--mu);">TOTAL DIARIO: ~2150 kcal · 195g P · 173g C · 71g G · Ajusta porciones a tu meta calculada arriba.</div>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">TIMING DE NUTRICIÓN</div>
+      <div class="rules">
+        <div class="rule">Pre-entrenamiento: carbos simples + proteína 45-60 min antes</div>
+        <div class="rule">Post-entrenamiento: whey + carbos en los primeros 30 min</div>
+        <div class="rule">Última comida 3h antes de dormir — sin carbos en cena</div>
+        <div class="rule">Ayuno intermitente opcional: ventana 8h (10:00–18:00) en días de cardio suave</div>
+        <div class="rule">No saltarse el desayuno en días de gym — rendimiento cae 15-20%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPLEMENTOS -->
+  <div class="acc" id="acc-sup">
+    <div class="ah" onclick="togAcc('acc-sup')">
+      <div class="ah-l"><span class="ah-s">💊</span><span class="ah-t">Suplementación</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <table class="tbl">
+        <thead><tr><th>SUPLEMENTO</th><th>DOSIS</th><th>MOMENTO</th><th>FUNCIÓN</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Creatina monoh.</strong></td><td>5g</td><td>AM con agua</td><td>Fuerza, masa, cognitivo</td></tr>
+          <tr><td><strong>Whey proteína</strong></td><td>30g</td><td>Post-gym / entre comidas</td><td>Síntesis proteica</td></tr>
+          <tr><td><strong>Cafeína</strong></td><td>100-200mg</td><td>Pre-gym — máx 12:00</td><td>Rendimiento, foco</td></tr>
+          <tr><td><strong>Omega-3</strong></td><td>2-3g EPA/DHA</td><td>AM con comida grasa</td><td>Inflamación, cardiovascular</td></tr>
+          <tr><td><strong>Vitamina D3</strong></td><td>4000 UI</td><td>AM con comida</td><td>Testosterona, inmunidad, ánimo</td></tr>
+          <tr><td><strong>Zinc</strong></td><td>25mg</td><td>PM antes de dormir</td><td>Testosterona, recuperación</td></tr>
+          <tr><td><strong>Magnesio glicinato</strong></td><td>400mg</td><td>PM 30 min antes dormir</td><td>Sueño profundo, ansiedad, músculos</td></tr>
+          <tr><td><strong>Vitamina K2</strong></td><td>100mcg</td><td>AM (con vit D)</td><td>Calcio en hueso no arterias</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.75rem;font-family:monospace;font-size:9px;color:var(--mu);">NOTA: La cafeína tiene vida media de 6h. Último consumo antes de las 14:00. El magnesio glicinato es superior al óxido (mejor absorción, no laxante).</div>
+    </div>
+  </div>
+
+  <!-- GYM PPL -->
+  <div class="lbl">PROGRAMA GYM</div>
+  <div class="acc open" id="acc-gym">
+    <div class="ah" onclick="togAcc('acc-gym')">
+      <div class="ah-l"><span class="ah-s">🏋️</span><span class="ah-t">PPL 6 días — Push / Pull / Legs</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="chips" style="margin-bottom:.75rem;">
+        <span class="chip ac">L PUSH</span><span class="chip ac">M PULL</span><span class="chip ac">X LEGS</span>
+        <span class="chip ac">J PUSH</span><span class="chip ac">V PULL</span><span class="chip ac">S LEGS</span>
+        <span class="chip">D DESCANSO ACTIVO</span>
+      </div>
+      <div class="dsel" id="gym-days">
+        <button class="ds" data-day="push1" onclick="showDay(this)">L PUSH</button>
+        <button class="ds" data-day="pull1" onclick="showDay(this)">M PULL</button>
+        <button class="ds" data-day="legs1" onclick="showDay(this)">X LEGS</button>
+        <button class="ds" data-day="push2" onclick="showDay(this)">J PUSH</button>
+        <button class="ds" data-day="pull2" onclick="showDay(this)">V PULL</button>
+        <button class="ds" data-day="legs2" onclick="showDay(this)">S LEGS</button>
+      </div>
+
+      <div id="gym-content">
+        <div id="d-push1">
+          <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">PUSH 1 — PECHO / HOMBROS / TRÍCEPS (énfasis pecho)</div>
+          <table class="tbl"><thead><tr><th>EJERCICIO</th><th>SERIES</th><th>REPS</th><th>DESCANSO</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Press banca plana (barra)</strong></td><td>4</td><td>6-8</td><td>3 min</td></tr>
+            <tr><td>Press inclinado mancuernas</td><td>3</td><td>8-12</td><td>2 min</td></tr>
+            <tr><td>Aperturas en cable bajo</td><td>3</td><td>12-15</td><td>90 seg</td></tr>
+            <tr><td><strong>Press militar barra</strong></td><td>4</td><td>6-8</td><td>3 min</td></tr>
+            <tr><td>Elevaciones laterales cable</td><td>3</td><td>15-20</td><td>60 seg</td></tr>
+            <tr><td>Elevaciones posteriores banco</td><td>3</td><td>15-20</td><td>60 seg</td></tr>
+            <tr><td>Extensiones tríceps polea alta</td><td>3</td><td>12-15</td><td>75 seg</td></tr>
+            <tr><td>Fondos en banco o barra</td><td>3</td><td>10-15</td><td>75 seg</td></tr>
+          </tbody></table>
+        </div>
+        <div id="d-pull1" style="display:none;">
+          <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">PULL 1 — ESPALDA / BÍCEPS / REMO (énfasis espalda ancha)</div>
+          <table class="tbl"><thead><tr><th>EJERCICIO</th><th>SERIES</th><th>REPS</th><th>DESCANSO</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Dominadas lastre (o asistidas)</strong></td><td>4</td><td>6-10</td><td>3 min</td></tr>
+            <tr><td>Remo con barra (Pendlay)</td><td>4</td><td>6-8</td><td>3 min</td></tr>
+            <tr><td>Jalón al pecho agarre cerrado</td><td>3</td><td>10-12</td><td>2 min</td></tr>
+            <tr><td>Remo en polea baja</td><td>3</td><td>12-15</td><td>90 seg</td></tr>
+            <tr><td>Face pulls</td><td>3</td><td>15-20</td><td>60 seg</td></tr>
+            <tr><td><strong>Curl barra EZ</strong></td><td>3</td><td>8-12</td><td>90 seg</td></tr>
+            <tr><td>Curl martillo alterno</td><td>3</td><td>12-15</td><td>75 seg</td></tr>
+          </tbody></table>
+        </div>
+        <div id="d-legs1" style="display:none;">
+          <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">LEGS 1 — CUÁDRICEPS / ISQUIOS / GLÚTEOS (énfasis cuádriceps)</div>
+          <table class="tbl"><thead><tr><th>EJERCICIO</th><th>SERIES</th><th>REPS</th><th>DESCANSO</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sentadilla trasera (barra)</strong></td><td>5</td><td>5-6</td><td>3-4 min</td></tr>
+            <tr><td>Prensa de piernas</td><td>4</td><td>10-12</td><td>2 min</td></tr>
+            <tr><td>Extensiones de cuádriceps</td><td>3</td><td>15-20</td><td>75 seg</td></tr>
+            <tr><td>Romanian Deadlift</td><td>4</td><td>8-10</td><td>2 min</td></tr>
+            <tr><td>Curl femoral acostado</td><td>3</td><td>12-15</td><td>90 seg</td></tr>
+            <tr><td>Elevaciones de pantorrilla de pie</td><td>4</td><td>15-20</td><td>60 seg</td></tr>
+          </tbody></table>
+        </div>
+        <div id="d-push2" style="display:none;">
+          <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">PUSH 2 — HOMBROS / PECHO / TRÍCEPS (énfasis hombros)</div>
+          <table class="tbl"><thead><tr><th>EJERCICIO</th><th>SERIES</th><th>REPS</th><th>DESCANSO</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Press militar mancuernas</strong></td><td>4</td><td>8-10</td><td>3 min</td></tr>
+            <tr><td>Elevaciones laterales mancuernas</td><td>4</td><td>15-20</td><td>75 seg</td></tr>
+            <tr><td>Press inclinado barra</td><td>3</td><td>8-10</td><td>2 min</td></tr>
+            <tr><td>Cruces en cable (banco plano)</td><td>3</td><td>12-15</td><td>90 seg</td></tr>
+            <tr><td>Elevaciones posteriores cable</td><td>4</td><td>15-20</td><td>60 seg</td></tr>
+            <tr><td>Press francés (tríceps)</td><td>3</td><td>10-12</td><td>90 seg</td></tr>
+            <tr><td>Jalón en polea tricep cuerda</td><td>3</td><td>12-15</td><td>75 seg</td></tr>
+          </tbody></table>
+        </div>
+        <div id="d-pull2" style="display:none;">
+          <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">PULL 2 — ESPALDA / BÍCEPS (énfasis trapecio y detalle)</div>
+          <table class="tbl"><thead><tr><th>EJERCICIO</th><th>SERIES</th><th>REPS</th><th>DESCANSO</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Peso muerto convencional</strong></td><td>4</td><td>5-6</td><td>3-4 min</td></tr>
+            <tr><td>Remo mancuerna (un brazo)</td><td>3</td><td>10-12 c/u</td><td>90 seg</td></tr>
+            <tr><td>Jalón al pecho agarre ancho</td><td>3</td><td>10-12</td><td>2 min</td></tr>
+            <tr><td>Shrug con barra o mancuernas</td><td>3</td><td>12-15</td><td>75 seg</td></tr>
+            <tr><td>Pull-over en polea</td><td>3</td><td>12-15</td><td>75 seg</td></tr>
+            <tr><td><strong>Curl en predicador</strong></td><td>3</td><td>8-12</td><td>90 seg</td></tr>
+            <tr><td>Curl concentrado</td><td>3</td><td>12-15 c/u</td><td>60 seg</td></tr>
+          </tbody></table>
+        </div>
+        <div id="d-legs2" style="display:none;">
+          <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">LEGS 2 — GLÚTEOS / ISQUIOS / PANTORRILLA (énfasis posterior)</div>
+          <table class="tbl"><thead><tr><th>EJERCICIO</th><th>SERIES</th><th>REPS</th><th>DESCANSO</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Hip thrust (barra)</strong></td><td>4</td><td>8-12</td><td>2 min</td></tr>
+            <tr><td>Sentadilla búlgara</td><td>3</td><td>10-12 c/u</td><td>2 min</td></tr>
+            <tr><td>Good mornings</td><td>3</td><td>10-12</td><td>90 seg</td></tr>
+            <tr><td>Zancadas caminando</td><td>3</td><td>12-15 c/u</td><td>90 seg</td></tr>
+            <tr><td>Curl femoral en máquina</td><td>4</td><td>12-15</td><td>75 seg</td></tr>
+            <tr><td>Abductor en máquina</td><td>3</td><td>15-20</td><td>60 seg</td></tr>
+            <tr><td>Elevaciones de pantorrilla sentado</td><td>4</td><td>15-20</td><td>60 seg</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <hr>
+      <div class="rules">
+        <div class="rule">Calienta 5-10 min cardio ligero + movilidad articular</div>
+        <div class="rule">Progresión: aumenta peso cuando completes todas las reps en las últimas series</div>
+        <div class="rule">1 set de calentamiento al 60% antes de los compuestos principales</div>
+        <div class="rule">Descanso activo domingos: 30-45 min caminata suave / yoga / movilidad</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDIO -->
+  <div class="acc" id="acc-cardio">
+    <div class="ah" onclick="togAcc('acc-cardio')">
+      <div class="ah-l"><span class="ah-s">🏃</span><span class="ah-t">Programa cardio — 4 semanas</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">SEMANA 1 — BASE AERÓBICA</div>
+      <table class="tbl" style="margin-bottom:1rem;"><thead><tr><th>DÍA</th><th>TIPO</th><th>DURACIÓN</th><th>ZONA</th></tr></thead>
+      <tbody>
+        <tr><td>Martes</td><td>Zona 2 — Caminar rápido / bici suave</td><td>30 min</td><td>FC 110-130</td></tr>
+        <tr><td>Viernes</td><td>Zona 2 — Trotar suave</td><td>25 min</td><td>FC 120-135</td></tr>
+        <tr><td>Domingo</td><td>Caminata activa</td><td>45 min</td><td>FC &lt;120</td></tr>
+      </tbody></table>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">SEMANA 2 — INTRODUCCIÓN HIIT</div>
+      <table class="tbl" style="margin-bottom:1rem;"><thead><tr><th>DÍA</th><th>TIPO</th><th>DURACIÓN</th><th>ESTRUCTURA</th></tr></thead>
+      <tbody>
+        <tr><td>Martes</td><td>Zona 2 — Trotar continuo</td><td>35 min</td><td>FC 120-140</td></tr>
+        <tr><td>Jueves</td><td>HIIT básico</td><td>20 min</td><td>30 seg sprint / 90 seg recuperación × 8</td></tr>
+        <tr><td>Domingo</td><td>Zona 2 larga</td><td>45 min</td><td>FC 115-130</td></tr>
+      </tbody></table>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">SEMANA 3 — PROGRESIÓN</div>
+      <table class="tbl" style="margin-bottom:1rem;"><thead><tr><th>DÍA</th><th>TIPO</th><th>DURACIÓN</th><th>ESTRUCTURA</th></tr></thead>
+      <tbody>
+        <tr><td>Martes</td><td>Zona 2 — Correr continuo</td><td>40 min</td><td>FC 130-145</td></tr>
+        <tr><td>Jueves</td><td>HIIT intermedio</td><td>25 min</td><td>40 seg sprint / 80 seg recuperación × 10</td></tr>
+        <tr><td>Sábado (post-legs)</td><td>Zona 2 bici / elíptica</td><td>30 min</td><td>Impacto bajo</td></tr>
+      </tbody></table>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.6rem;">SEMANA 4 — PEAK</div>
+      <table class="tbl"><thead><tr><th>DÍA</th><th>TIPO</th><th>DURACIÓN</th><th>ESTRUCTURA</th></tr></thead>
+      <tbody>
+        <tr><td>Martes</td><td>Zona 2 — Correr continuo</td><td>45 min</td><td>FC 130-150</td></tr>
+        <tr><td>Jueves</td><td>HIIT avanzado</td><td>30 min</td><td>45 seg sprint / 75 seg recuperación × 12</td></tr>
+        <tr><td>Domingo</td><td>Sesión larga Zona 2</td><td>60 min</td><td>FC 120-140</td></tr>
+      </tbody></table>
+
+      <hr>
+      <div class="rules">
+        <div class="rule">Zona 2 = puedes mantener conversación. Máx 220-edad × 0.65</div>
+        <div class="rule">HIIT siempre en días sin gym o mínimo 6h de separación</div>
+        <div class="rule">10,000 pasos/día base obligatorio — usa escaleras, camina al comer</div>
+        <div class="rule">Si el cardio afecta tu rendimiento en gym, reduce HIIT primero</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUEÑO -->
+  <div class="acc" id="acc-sleep">
+    <div class="ah" onclick="togAcc('acc-sleep')">
+      <div class="ah-l"><span class="ah-s">🌙</span><span class="ah-t">Protocolo de sueño profundo</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="chips" style="margin-bottom:.75rem;">
+        <span class="chip ac">7.5-8H SUEÑO</span><span class="chip ac">22:30 MÁXIMO</span><span class="chip ac">18-20°C</span><span class="chip ac">OSCURIDAD TOTAL</span>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="stn">20:30</div><div class="stb"><h4>Última comida</h4><p>Cena ligera sin carbos altos. Permite digestión de 2h antes de dormir.</p></div></div>
+        <div class="step"><div class="stn">21:00</div><div class="stb"><h4>Inicio protocolo nocturno</h4><p>Registro del día, skincare PM. Dimmer de luces o luz roja/naranja únicamente.</p></div></div>
+        <div class="step"><div class="stn">21:00</div><div class="stb"><h4>Modo avión</h4><p>Sin pantallas. Lectura en papel, journaling, o conversación.</p></div></div>
+        <div class="step"><div class="stn">21:30</div><div class="stn"></div><div class="stb"><h4>Magnesio glicinato 400mg + Zinc 25mg</h4><p>Actúan en ~60-90 min. Aumentan ondas delta del sueño profundo.</p></div></div>
+        <div class="step"><div class="stn">22:00</div><div class="stb"><h4>Habitación preparada</h4><p>Temperatura 18-20°C, oscuridad total (antifaz si necesario), silencio o ruido blanco.</p></div></div>
+        <div class="step"><div class="stn">22:15</div><div class="stb"><h4>Técnica 4-7-8</h4><p>Inhala 4 seg, retén 7, exhala 8. Repite 4 veces. Activa SNP para dormir rápido.</p></div></div>
+        <div class="step"><div class="stn">22:30</div><div class="stb"><h4>Dormir</h4><p>Meta: dormido antes de las 22:30. Despertarse a las 06:00 = 7.5h exactas.</p></div></div>
+        <div class="step"><div class="stn">06:00</div><div class="stb"><h4>Exposición solar inmediata</h4><p>10-15 min de luz natural al despertar ancla tu ritmo circadiano. Crítico para calidad de sueño siguiente.</p></div></div>
+      </div>
+      <hr>
+      <div class="rules">
+        <div class="rule">Sin cafeína después de las 14:00 — vida media 6h</div>
+        <div class="rule">Sin alcohol — destruye el sueño REM incluso en dosis pequeñas</div>
+        <div class="rule">Mantén horario constante incluso en fines de semana (±30 min)</div>
+        <div class="rule">Si no duermes en 20 min, levántate, haz algo relajante, regresa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIDRATACIÓN -->
+  <div class="acc" id="acc-agua">
+    <div class="ah" onclick="togAcc('acc-agua')">
+      <div class="ah-l"><span class="ah-s">💧</span><span class="ah-t">Hidratación</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">META DIARIA</div>
+      <div class="field" style="padding:.5rem 0;border-bottom:none;">
+        <div class="flbl">PESO CORPORAL (kg)</div>
+        <input type="number" id="water-kg" placeholder="75" oninput="calcWater()">
+      </div>
+      <div id="water-result" style="background:var(--s3);border:1px solid var(--br);padding:.75rem;margin:.5rem 0 .75rem;font-family:monospace;font-size:12px;color:var(--mu);">Ingresa tu peso para calcular.</div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">CONTADOR — VASOS HOY (250ml)</div>
+      <div class="water-c">
+        <button class="wb-b" onclick="adjWater(-1)" style="font-size:1.2rem;">−</button>
+        <div style="font-family:monospace;font-size:2.5rem;color:var(--tx);min-width:80px;text-align:center;" id="water-count">0</div>
+        <button class="wb-b" onclick="adjWater(1)" style="font-size:1.2rem;">+</button>
+      </div>
+      <div id="water-ml" style="text-align:center;font-family:monospace;font-size:9px;color:var(--mu);margin-top:.3rem;">0 ml</div>
+      <div style="margin-top:.75rem;" class="prog-bg"><div class="prog-f" id="water-bar" style="width:0%;background:#1e6091;"></div></div>
+
+      <hr>
+      <div class="rules">
+        <div class="rule">500ml al despertar antes de cualquier cosa — rehidrata del ayuno nocturno</div>
+        <div class="rule">500ml pre-gym + 500ml durante el entrenamiento</div>
+        <div class="rule">Sin agua 30 min antes de dormir — evita interrupciones</div>
+        <div class="rule">Orina amarillo pálido = bien hidratado. Oscuro = bebe más</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKINCARE -->
+  <div class="lbl">CUIDADO DE PIEL</div>
+  <div class="acc" id="acc-skin">
+    <div class="ah" onclick="togAcc('acc-skin')">
+      <div class="ah-l"><span class="ah-s">✨</span><span class="ah-t">Skincare AM / PM — protocolo avanzado</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">RUTINA MAÑANA (AM) — ~5 min</div>
+      <div class="skin-step">
+        <div class="skin-num">01</div><div class="skin-b"><h4>Limpiador suave / agua fría</h4><div class="why">Retira sebos nocturnos sin romper barrera</div><div class="prod">→ CeraVe Hydrating Cleanser / La Roche-Posay Effaclar</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">02</div><div class="skin-b"><h4>Vitamina C (10-20% L-ascórbico)</h4><div class="why">Antioxidante, uniformidad, colágeno. Protege contra UV oxidativo</div><div class="prod">→ TruSkin Vitamin C / Timeless 20% Vit C</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">03</div><div class="skin-b"><h4>Niacinamida 5-10%</h4><div class="why">Poros, manchas, luminosidad, control de sebo</div><div class="prod">→ The Ordinary 10% Niacinamide / Paula's Choice 10%</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">04</div><div class="skin-b"><h4>Ácido hialurónico</h4><div class="why">Hidratación profunda. Aplicar con piel ligeramente húmeda</div><div class="prod">→ The Ordinary HA 2% / Neutrogena Hydro Boost</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">05</div><div class="skin-b"><h4>Hidratante / Moisturizer</h4><div class="why">Barrera, retención hídrica. Elegir según tipo de piel</div><div class="prod">→ CeraVe AM / Neutrogena Oil-Free</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">06</div><div class="skin-b"><h4>SPF 50+ — OBLIGATORIO</h4><div class="why">El paso más importante. UV = envejecimiento acelerado, manchas</div><div class="prod">→ Altruist SPF 50 / La Roche-Posay Anthelios / ISDIN Fusion Water</div></div>
+      </div>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">RUTINA NOCHE (PM) — ~7 min</div>
+      <div class="skin-step">
+        <div class="skin-num">01</div><div class="skin-b"><h4>Doble limpieza</h4><div class="why">Aceite para SPF/sebo, luego limpiador suave para piel</div><div class="prod">→ Aceite de jojoba / micellar water + CeraVe</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">02</div><div class="skin-b"><h4>Ácido salicílico (opcional, pieles grasas)</h4><div class="why">2-3x/semana. Exfolia internamente el poro, previene acné</div><div class="prod">→ Paula's Choice BHA 2% / The Ordinary Sal. 2%</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">03</div><div class="skin-b"><h4>Retinol (empezar 0.025% → aumentar gradual)</h4><div class="why">Anti-aging #1. Estimula colágeno, renueva célula. Solo PM</div><div class="prod">→ The Ordinary 0.2% → CeraVe Retinol → Paula's 1%</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">04</div><div class="skin-b"><h4>Niacinamida (si no usaste retinol)</h4><div class="why">No mezclar retinol + vitamina C directamente</div><div class="prod">→ Alternar noches con retinol</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">05</div><div class="skin-b"><h4>Ácido hialurónico + Hidratante rico</h4><div class="why">Buffer para retinol, reparación nocturna de barrera</div><div class="prod">→ CeraVe Moisturizing Cream / Vanicream</div></div>
+      </div>
+      <div class="skin-step">
+        <div class="skin-num">06</div><div class="skin-b"><h4>Contorno de ojos (opcional)</h4><div class="why">Zona más delgada de la piel. Cafeína para ojeras, retinol light</div><div class="prod">→ The Ordinary Caffeine Solution 5%</div></div>
+      </div>
+      <hr>
+      <div class="rules">
+        <div class="rule">Introduce un producto nuevo a la vez, cada 2 semanas</div>
+        <div class="rule">Retinol: empieza 2x/semana → 3x → diario en 2-3 meses</div>
+        <div class="rule">No mezclar: ácidos AHA/BHA + retinol en la misma aplicación</div>
+        <div class="rule">Vitamina C por la mañana, retinol por la noche — siempre</div>
+        <div class="rule">SPF todos los días, llueva o haga sol, incluso en interiores cercanos a ventana</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROOMING -->
+  <div class="acc" id="acc-groom">
+    <div class="ah" onclick="togAcc('acc-groom')">
+      <div class="ah-l"><span class="ah-s">💈</span><span class="ah-t">Grooming masculino completo</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">CABELLO</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Lavar máx 3x/semana con shampoo sin sulfatos (Redken, Pureology)</div>
+        <div class="rule">Acondicionador en puntas, no raíces. Enjuague con agua fría final</div>
+        <div class="rule">Corte cada 3-4 semanas para mantener forma. Conoce tu tipo de cara</div>
+        <div class="rule">Cara ovalada/cuadrada: casi cualquier corte. Cara redonda: evita pelo muy corto a los lados</div>
+        <div class="rule">Productos: pomada mate (look natural/texturizado) vs. cera brillante (formal)</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">BARBA</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Define las líneas: mejilla en línea natural + cuello 2 dedos sobre manzana de Adán</div>
+        <div class="rule">Recortar 1-2x/semana con máquina. Delinear contornos con afeitadora</div>
+        <div class="rule">Aceite de barba: hidrata y controla frizz. Aplica diariamente al levantarte</div>
+        <div class="rule">Barba y cabello deben tener contraste de longitud — barba corta + pelo largo o viceversa</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">CEJAS</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Eliminar pelo entre cejas (uniceja) y por encima del arco si está muy poblado</div>
+        <div class="rule">No abusar del diseño — cejas masculinas deben verse naturales, no depiladas</div>
+        <div class="rule">Opcional: maquillaje invisible (pomada o lápiz café claro) para rellenar huecos</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">DIENTES</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Cepillar 2 min dos veces al día + hilo dental diario</div>
+        <div class="rule">Blanqueamiento: tiras de peróxido 2 semanas/mes (Crest 3D Whitestrips)</div>
+        <div class="rule">Enjuague bucal con flúor en las noches — no enjuagar con agua tras aplicarlo</div>
+        <div class="rule">Limpieza profesional mínimo 2x/año</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">UÑAS Y MANOS</div>
+      <div class="rules">
+        <div class="rule">Cortar y limar semanalmente — uñas cuadradas cortas en manos, cuadradas en pies</div>
+        <div class="rule">Crema de manos 1x/día — manos descuidadas restan atractivo significativamente</div>
+        <div class="rule">Eliminar cutículas con aceite + empujador — no cortar, solo empujar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOOKSMAXING -->
+  <div class="acc" id="acc-look">
+    <div class="ah" onclick="togAcc('acc-look')">
+      <div class="ah-l"><span class="ah-s">🏆</span><span class="ah-t">Looksmaxing — apariencia óptima</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">MEWING — PROTOCOLO DIARIO</div>
+      <div class="steps" style="margin-bottom:1rem;">
+        <div class="step"><div class="stn">1</div><div class="stb"><h4>Posición de lengua</h4><p>Toda la lengua (no solo punta) presionando suavemente el paladar. Dientes juntos sin apretar.</p></div></div>
+        <div class="step"><div class="stn">2</div><div class="stb"><h4>Respirar por nariz</h4><p>SIEMPRE. La respiración bucal crónica alarga la cara y cae el maxilar. Entrenamiento: cerrar boca conscientemente durante el día.</p></div></div>
+        <div class="step"><div class="stn">3</div><div class="stb"><h4>Postura de cabeza</h4><p>Cuello vertical, cabeza levantada, barbilla ligeramente adentro (no hacia arriba). Imagina un hilo tirando desde la coronilla.</p></div></div>
+        <div class="step"><div class="stn">4</div><div class="stb"><h4>Masticar correctamente</h4><p>Mastica por ambos lados, alimentos duros si es posible (zanahoria cruda, manzana). Activa maseteros y define mandíbula.</p></div></div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">POSTURA Y FRAME</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Ejercicios de postura diarios: face pulls + retracción de escápulas + chin tucks (3×15)</div>
+        <div class="rule">Evitar hombros caídos — configura escritorio a altura correcta, monitor a nivel de ojos</div>
+        <div class="rule">Caminar despacio, deliberado, hombros atrás, pisando con el talón</div>
+        <div class="rule">Frame amplio = hombros anchos + cintura estrecha. El gym construye esto mes a mes</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">ROPA POR TIPO DE CUERPO</div>
+      <table class="tbl" style="margin-bottom:1rem;">
+        <thead><tr><th>TIPO</th><th>PRIORIZAR</th><th>EVITAR</th></tr></thead>
+        <tbody>
+          <tr><td>Ectomorfo (delgado)</td><td>Ropa estructurada, hombros definidos, colores sólidos</td><td>Ropa holgada que haga ver más delgado</td></tr>
+          <tr><td>Mesomorfo (atlético)</td><td>Ropa ajustada que muestre la forma, V-neck, tailored</td><td>Ropa demasiado amplia que esconda el físico</td></tr>
+          <tr><td>Endomorfo (fornido)</td><td>Patrones verticales, ropa bien ajustada (no apretada), capas</td><td>Horizontales, ropa con estampados grandes</td></tr>
+        </tbody>
+      </table>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">COLORES POR TONO DE PIEL</div>
+      <table class="tbl">
+        <thead><tr><th>TONO</th><th>COLORES QUE POTENCIAN</th><th>EVITAR</th></tr></thead>
+        <tbody>
+          <tr><td>Piel clara / rosada</td><td>Azul marino, gris, blanco, verde oscuro</td><td>Beige, amarillo, naranja</td></tr>
+          <tr><td>Piel media / oliva</td><td>Casi todo. Tierra, camel, terracota, azul</td><td>Colores muy apagados o lavados</td></tr>
+          <tr><td>Piel morena / oscura</td><td>Blanco, beige, amarillo, naranja, rojo, púrpura</td><td>Marrón oscuro, colores muy oscuros</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">FOTOGRAFÍA Y PRESENCIA VISUAL</div>
+      <div class="rules">
+        <div class="rule">Luz natural lateral (ventana) = mejor iluminación para retratos</div>
+        <div class="rule">Ángulo de cámara ligeramente elevado — nunca desde abajo</div>
+        <div class="rule">Perfil 3/4 suele ser más favorecedor que de frente</div>
+        <div class="rule">Fondo neutro y ordenado. El entorno comunica quién eres</div>
+        <div class="rule">Expresión: relajada, labios ligeramente separados, mirada directa</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<nav class="botnav">
+  <a href="index.html" class="bn"><span class="bns">◈</span><span>HOY</span></a>
+  <a href="fisico.html" class="bn on"><span class="bns">◉</span><span>FÍSICO</span></a>
+  <a href="mental.html" class="bn"><span class="bns">◎</span><span>MENTE</span></a>
+  <a href="economico-social.html" class="bn"><span class="bns">◆</span><span>DINERO</span></a>
+  <a href="relacion.html" class="bn"><span class="bns">○</span><span>AMOR</span></a>
+</nav>
+
+<script>
+const R={
+  today:()=>new Date().toISOString().slice(0,10),
+  get:(k,d=null)=>{try{return JSON.parse(localStorage.getItem('rt_'+k))??d}catch{return d}},
+  set:(k,v)=>{try{localStorage.setItem('rt_'+k,JSON.stringify(v))}catch{}},
+  getDay:()=>R.get('d_'+R.today(),{}),
+  setDay:(p)=>{const k='d_'+R.today();const d=R.get(k,{});R.set(k,{...d,...p})}
+};
+
+function togAcc(id){document.getElementById(id).classList.toggle('open');}
+
+// Tracker
+function saveTracker(){
+  const cal=+document.getElementById('t-cal').value||0;
+  const prot=+document.getElementById('t-prot').value||0;
+  const agua=+document.getElementById('t-agua').value||0;
+  const steps=+document.getElementById('t-steps').value||0;
+  const sleep=+document.getElementById('t-sleep').value||0;
+  const peso=+document.getElementById('t-peso').value||0;
+  const gym=document.getElementById('t-gym').checked;
+  const cardio=document.getElementById('t-cardio').checked;
+  R.setDay({calories:cal,protein:prot,water_ml:agua,steps,sleep,weight:peso,gym_done:gym,cardio_done:cardio});
+  document.getElementById('cal-lbl').textContent=`${cal} / 2000`;
+  document.getElementById('cal-bar').style.width=Math.min(100,cal/20)+'%';
+  document.getElementById('prot-lbl').textContent=`${prot} / 180g`;
+  document.getElementById('prot-bar').style.width=Math.min(100,prot/1.8)+'%';
+  document.getElementById('spill').textContent=gym||cardio?'✓':'—';
+}
+
+function loadTracker(){
+  const d=R.getDay();
+  if(d.calories){document.getElementById('t-cal').value=d.calories;}
+  if(d.protein){document.getElementById('t-prot').value=d.protein;}
+  if(d.water_ml){document.getElementById('t-agua').value=d.water_ml;}
+  if(d.steps){document.getElementById('t-steps').value=d.steps;}
+  if(d.sleep){document.getElementById('t-sleep').value=d.sleep;}
+  if(d.weight){document.getElementById('t-peso').value=d.weight;}
+  if(d.gym_done){document.getElementById('t-gym').checked=true;}
+  if(d.cardio_done){document.getElementById('t-cardio').checked=true;}
+  saveTracker();
+}
+
+// Macro calc
+function calcMacros(){
+  const kg=+document.getElementById('calc-peso').value;
+  const obj=document.getElementById('calc-obj').value;
+  if(!kg)return;
+  const bmr=kg*24;
+  let kcal=bmr*1.4;
+  if(obj==='cut')kcal-=500;
+  if(obj==='bulk')kcal+=300;
+  const prot=Math.round(kg*2.2);
+  const fat=Math.round(kcal*0.25/9);
+  const carbs=Math.round((kcal-prot*4-fat*9)/4);
+  document.getElementById('macro-result').innerHTML=
+    `<span style="color:var(--tx);">META: ${Math.round(kcal)} kcal</span>&nbsp;&nbsp;`+
+    `P: <span style="color:var(--ac)">${prot}g</span>&nbsp;&nbsp;`+
+    `C: <span style="color:var(--ac)">${carbs}g</span>&nbsp;&nbsp;`+
+    `G: <span style="color:var(--ac)">${fat}g</span><br>`+
+    `<span style="color:var(--mu);font-size:10px;">Proteína = ${kg*2.2|0}g = 2.2g/kg peso corporal</span>`;
+}
+
+// Water
+let waterGlasses=0;
+let waterMeta=3000;
+function adjWater(d){
+  waterGlasses=Math.max(0,waterGlasses+d);
+  const ml=waterGlasses*250;
+  document.getElementById('water-count').textContent=waterGlasses;
+  document.getElementById('water-ml').textContent=ml+' ml';
+  document.getElementById('water-bar').style.width=Math.min(100,ml/waterMeta*100)+'%';
+  R.setDay({water_glasses:waterGlasses,water_ml_count:ml});
+}
+function calcWater(){
+  const kg=+document.getElementById('water-kg').value;
+  if(!kg)return;
+  waterMeta=kg*40;
+  document.getElementById('water-result').innerHTML=
+    `Meta: <span style="color:var(--tx);">${(waterMeta/1000).toFixed(1)} L / día</span><br>`+
+    `<span style="color:var(--mu);font-size:10px;">= ${waterMeta} ml = ${Math.ceil(waterMeta/250)} vasos de 250ml</span><br>`+
+    `<span style="color:var(--mu);font-size:10px;">Fórmula: 40ml × ${kg}kg peso corporal</span>`;
+}
+
+// Gym day selector
+let activeDay='push1';
+function showDay(btn){
+  document.querySelectorAll('.ds').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#gym-content > div').forEach(d=>d.style.display='none');
+  const day=btn.dataset.day;
+  document.getElementById('d-'+day).style.display='block';
+  activeDay=day;
+  R.set('fisico',{...R.get('fisico',{}),gym_day:day});
+}
+
+// Init
+loadTracker();
+const today=new Date().getDay();
+const dayMap=[null,'push1','pull1','legs1','push2','pull2','legs2'];
+const todayDay=dayMap[today]||'push1';
+const savedDay=R.get('fisico',{}).gym_day||todayDay;
+const btn=document.querySelector(`[data-day="${savedDay}"]`);
+if(btn)showDay(btn);
+const waterData=R.getDay();
+if(waterData.water_glasses){waterGlasses=waterData.water_glasses;adjWater(0);}
+</script>
+</body>
+</html>

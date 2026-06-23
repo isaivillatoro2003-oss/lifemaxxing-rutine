@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>RUTINE — Relación</title>
+<style>
+:root{--bg:#090909;--s1:#0f0f0f;--s2:#141414;--s3:#1a1a1a;--br:#1d1d1d;--br2:#272727;--tx:#e0e0e0;--mu:#505050;--mu2:#2e2e2e;--ac:#c9a96e;--ac2:#7a6040;--ac3:#e8d4a0;--rd:#c0392b;--gn:#27ae60}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);font-family:-apple-system,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;min-height:100vh;padding-bottom:72px}a{color:inherit;text-decoration:none}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(9,9,9,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--br);display:flex;align-items:center;padding:0 1.25rem;height:52px;gap:1rem}
+.brand{font-family:monospace;font-size:10px;letter-spacing:.42em;color:var(--ac);flex-shrink:0}
+.pgtitle{font-family:monospace;font-size:9px;letter-spacing:.22em;color:var(--mu);text-transform:uppercase;flex:1}
+.spill{font-family:monospace;font-size:11px;background:var(--ac);color:var(--bg);padding:.2rem .6rem;min-width:46px;text-align:center;flex-shrink:0}
+.botnav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(9,9,9,.97);border-top:1px solid var(--br);display:flex;height:72px;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--mu);transition:color .15s;cursor:pointer;font-family:monospace;font-size:8.5px;letter-spacing:.1em;border:none;background:none;position:relative;padding:0}
+.bn::after{content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;background:transparent;transition:background .15s}
+.bn.on{color:var(--ac)}.bn.on::after{background:var(--ac)}.bns{font-size:16px;line-height:1}
+@media(min-width:768px){body{padding-bottom:0;padding-left:196px}.topbar{left:196px}.botnav{width:196px;top:0;bottom:0;left:0;right:auto;height:auto;flex-direction:column;justify-content:flex-start;border-top:none;border-right:1px solid var(--br);padding:52px 0 0}.bn{flex:none;flex-direction:row;justify-content:flex-start;gap:.7rem;padding:.9rem 1.25rem;font-size:11px;width:100%}.bn::after{top:0;bottom:0;left:0;right:auto;width:2px;height:auto}.bns{font-size:14px}}
+.main{max-width:700px;margin:0 auto;padding:1.5rem 1.25rem}
+.lbl{font-family:monospace;font-size:8.5px;letter-spacing:.28em;color:var(--mu);text-transform:uppercase;margin:1.75rem 0 .7rem}.lbl:first-child{margin-top:0}
+.card{background:var(--s1);border:1px solid var(--br);padding:1rem;margin-bottom:.7rem}
+.clbl{font-family:monospace;font-size:8px;letter-spacing:.24em;color:var(--ac);text-transform:uppercase;display:block;margin-bottom:.7rem}
+.acc{margin-bottom:.4rem}
+.ah{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem;background:var(--s1);border:1px solid var(--br);cursor:pointer;user-select:none;min-height:52px;transition:background .15s}
+.ah:hover,.ah:active{background:var(--s2)}.ah-l{display:flex;align-items:center;gap:.65rem}.ah-s{font-size:14px}.ah-t{font-size:14px;font-weight:500}.ah-a{font-family:monospace;font-size:10px;color:var(--mu);transition:transform .2s;flex-shrink:0}.acc.open .ah-a{transform:rotate(90deg)}.ab{display:none;background:var(--s2);border:1px solid var(--br);border-top:none;padding:1rem}.acc.open .ab{display:block}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}.tbl th{font-family:monospace;font-size:8px;letter-spacing:.16em;color:var(--mu);text-transform:uppercase;text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--br)}.tbl td{padding:.65rem .7rem;border-bottom:1px solid var(--br);vertical-align:top}.tbl tr:last-child td{border-bottom:none}
+.rules{display:grid;gap:.38rem}.rule{font-size:13px;color:var(--mu);padding-left:1.1rem;position:relative;line-height:1.5}.rule::before{content:'—';position:absolute;left:0;color:var(--ac2);font-family:monospace}
+.btn{padding:.6rem 1.2rem;background:transparent;border:1px solid var(--br2);color:var(--tx);font-family:monospace;font-size:9px;letter-spacing:.18em;cursor:pointer;min-height:44px;transition:all .15s;text-transform:uppercase}.btn:active,.btn:hover{background:var(--s2)}.btn.pr{border-color:var(--ac);color:var(--ac)}.btn.pr:active,.btn.pr:hover{background:var(--ac);color:var(--bg)}.btn.sm{padding:.4rem .8rem;min-height:36px;font-size:8px}
+.field{display:flex;flex-direction:column;gap:.35rem;padding:.75rem 0;border-bottom:1px solid var(--br)}.field:last-child{border-bottom:none}.flbl{font-family:monospace;font-size:9px;letter-spacing:.16em;color:var(--mu);text-transform:uppercase}
+input[type=number],input[type=text]{background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--tx);font-size:15px;font-family:inherit;width:100%;outline:none;padding:.25rem 0;-webkit-appearance:none}input:focus{border-bottom-color:var(--ac)}
+textarea{background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--tx);font-size:14px;width:100%;min-height:80px;resize:none;outline:none;line-height:1.65;padding:.4rem 0;font-family:inherit}
+textarea::placeholder{color:var(--mu);font-style:italic}textarea:focus{border-bottom-color:var(--ac)}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.5rem 0}.chip{font-family:monospace;font-size:9px;color:var(--mu);border:1px solid var(--br2);padding:.2rem .55rem}.chip.ac{border-color:var(--ac2);color:var(--ac)}
+.steps{display:flex;flex-direction:column}.step{display:flex;gap:.7rem;padding:.75rem 0;border-bottom:1px solid var(--br)}.step:last-child{border-bottom:none}.stn{font-family:monospace;font-size:9px;color:var(--ac);min-width:20px;padding-top:.15rem;flex-shrink:0}.stb h4{font-size:13px;font-weight:500;margin-bottom:.2rem}.stb p{font-size:12px;color:var(--mu);line-height:1.5}
+.qt{border-left:2px solid var(--ac2);padding:.65rem .875rem;margin:.65rem 0;background:var(--s3)}.qt p{font-style:italic;font-size:13px;color:var(--mu)}.qt cite{font-style:normal;font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.1em;display:block;margin-top:.25rem}
+hr{border:none;border-top:1px solid var(--br);margin:1.1rem 0}
+.prog-l{display:flex;justify-content:space-between;font-family:monospace;font-size:9px;color:var(--mu);margin-bottom:.3rem}.prog-bg{height:3px;background:var(--br2)}.prog-f{height:3px;background:var(--ac);transition:width .4s}
+.eg{border-left:3px solid var(--ac2);padding:.6rem .875rem;background:var(--s3);margin:.5rem 0}
+.eg-l{font-family:monospace;font-size:8px;color:var(--ac);letter-spacing:.12em;margin-bottom:.25rem}
+.eg p{font-size:12px;color:var(--mu);font-style:italic}
+.mg3{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:.65rem 0}@media(max-width:380px){.mg3{grid-template-columns:1fr}}.mc3{text-align:center;padding:.6rem;background:var(--s3);border:1px solid var(--br)}.mv3{font-family:monospace;font-size:1.8rem;color:var(--tx)}.ml3{font-family:monospace;font-size:8px;color:var(--mu);letter-spacing:.1em;margin-top:.2rem}
+.moment-row{display:flex;align-items:flex-start;gap:.5rem;padding:.6rem 0;border-bottom:1px solid var(--br)}.moment-row:last-child{border-bottom:none}
+.moment-date{font-family:monospace;font-size:9px;color:var(--ac);min-width:72px;flex-shrink:0;padding-top:.2rem}
+.moment-desc{font-size:13px;flex:1}
+.exp-del{background:none;border:none;color:var(--mu2);cursor:pointer;font-size:1rem;padding:.25rem;flex-shrink:0;transition:color .15s}.exp-del:hover{color:var(--rd)}
+.date-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem}@media(min-width:500px){.date-grid{grid-template-columns:repeat(3,1fr)}}
+.date-card{background:var(--s3);border:1px solid var(--br);padding:.75rem;cursor:pointer;transition:all .15s;user-select:none}
+.date-card:hover,.date-card:active{border-color:var(--ac);background:var(--s2)}
+.date-card.done{opacity:.4}.date-card.done .dc-n{text-decoration:line-through}
+.dc-cat{font-family:monospace;font-size:7.5px;color:var(--ac);letter-spacing:.12em;margin-bottom:.3rem}
+.dc-n{font-size:13px;font-weight:500;margin-bottom:.2rem}.dc-d{font-size:11px;color:var(--mu)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="brand">RUTINE</a>
+  <span class="pgtitle">AMOR</span>
+  <div class="spill" id="spill">—</div>
+</header>
+
+<main class="main">
+
+  <!-- TRACKER DE CONEXIÓN -->
+  <div class="lbl" style="margin-top:0;">TRACKER DE RELACIÓN</div>
+  <div class="card">
+    <span class="clbl">ESTADO DEL MES — CONEXIÓN</span>
+    <div class="mg3">
+      <div class="mc3">
+        <div class="mv3" id="dates-count">0</div>
+        <div class="ml3">CITAS</div>
+      </div>
+      <div class="mc3">
+        <div class="mv3" id="gestures-count">0</div>
+        <div class="ml3">GESTOS</div>
+      </div>
+      <div class="mc3">
+        <div class="mv3" id="moments-count">0</div>
+        <div class="ml3">MOMENTOS</div>
+      </div>
+    </div>
+    <div class="prog-l"><span>META MENSUAL (4 citas + 8 gestos)</span><span id="rel-pct">0%</span></div>
+    <div class="prog-bg"><div class="prog-f" id="rel-bar" style="width:0%"></div></div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;">
+      <button class="btn pr sm" onclick="addDate()">+ CITA</button>
+      <button class="btn sm" onclick="addGesture()">+ GESTO</button>
+    </div>
+  </div>
+
+  <!-- COMUNICACIÓN ASERTIVA XYZ -->
+  <div class="lbl">COMUNICACIÓN</div>
+  <div class="acc open" id="acc-xyz">
+    <div class="ah" onclick="togAcc('acc-xyz')">
+      <div class="ah-l"><span class="ah-s">💬</span><span class="ah-t">Protocolo XYZ — Comunicación asertiva</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="qt"><p>"Tengo un problema con lo que hiciste X. En la situación Y, me sentí Z."</p><cite>— ESTRUCTURA XYZ — GOTTMAN INSTITUTE</cite></div>
+
+      <p style="font-size:13px;color:var(--mu);margin-bottom:1rem;">El protocolo XYZ elimina acusaciones y defensividad. Transforma conflictos en conversaciones. Se usa cuando algo te molesta y necesitas expresarlo sin atacar.</p>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">ESTRUCTURA</div>
+      <div class="steps">
+        <div class="step">
+          <div class="stn">X</div>
+          <div class="stb">
+            <h4>Describe el comportamiento específico — sin interpretaciones</h4>
+            <p>Qué hizo o dijo exactamente. No "eres desconsiderado" sino "llegaste 40 minutos tarde sin avisar".</p>
+            <div class="eg"><div class="eg-l">EJEMPLO</div><p>"Cuando llegas tarde sin avisarme..."</p></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="stn">Y</div>
+          <div class="stb">
+            <h4>Contexto o situación específica</h4>
+            <p>Cuándo, dónde o bajo qué circunstancias ocurrió el comportamiento.</p>
+            <div class="eg"><div class="eg-l">EJEMPLO</div><p>"...especialmente cuando teníamos planes que preparé con anticipación..."</p></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="stn">Z</div>
+          <div class="stb">
+            <h4>Tu emoción — en primera persona</h4>
+            <p>Cómo te hizo sentir. No "me haces sentir" (acusación) sino "me sentí" (responsabilidad emocional).</p>
+            <div class="eg"><div class="eg-l">EJEMPLO</div><p>"...me siento poco valorado y me cuesta confiar en los planes futuros."</p></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="stn">+</div>
+          <div class="stb">
+            <h4>Petición concreta (opcional pero poderoso)</h4>
+            <p>Qué necesitas que cambie. Específico, accionable, razonable.</p>
+            <div class="eg"><div class="eg-l">EJEMPLO</div><p>"Lo que necesito es que me avises si vas a llegar tarde, aunque sea un mensaje breve."</p></div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">REGLAS DE ORO — COMUNICACIÓN DE PAREJA</div>
+      <div class="rules">
+        <div class="rule">Atacar el problema, nunca a la persona. "El problema es X" no "el problema eres tú"</div>
+        <div class="rule">Habla en primera persona: "yo siento" vs "tú haces que yo sienta"</div>
+        <div class="rule">Un tema a la vez. No acumular agravios — eso escala</div>
+        <div class="rule">Escuchar para entender, no para responder. Repite lo que escuchaste antes de responder</div>
+        <div class="rule">Pide tiempo fuera si la emoción sube demasiado: "Necesito 20 minutos y continúo"</div>
+        <div class="rule">No usar "siempre" o "nunca" — son hipérboles que ponen al otro a la defensiva</div>
+      </div>
+
+      <div class="field" style="margin-top:.75rem;">
+        <div class="flbl">PRÁCTICA XYZ — ESCRIBE ALGO QUE NECESITAS DECIR</div>
+        <textarea id="xyz-practice" placeholder="Cuando haces X... en la situación Y... me siento Z... y lo que necesito es..."></textarea>
+      </div>
+      <button class="btn pr" onclick="saveXYZ()" style="width:100%;margin-top:.5rem;">GUARDAR</button>
+    </div>
+  </div>
+
+  <!-- MANEJO DE CONFLICTOS -->
+  <div class="acc" id="acc-conflict">
+    <div class="ah" onclick="togAcc('acc-conflict')">
+      <div class="ah-l"><span class="ah-s">⚡</span><span class="ah-t">Manejo de conflictos</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="chips" style="margin-bottom:.75rem;">
+        <span class="chip ac">REGLA 24H</span><span class="chip ac">NO ATACAR</span><span class="chip ac">1 TEMA</span>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">PROTOCOLO DE CONFLICTO — 6 PASOS</div>
+      <div class="steps">
+        <div class="step"><div class="stn">1</div><div class="stb"><h4>Regla de las 24 horas</h4><p>Si la discusión se pone muy emocional, pausa. "Quiero hablar de esto pero necesito 24h para procesarlo." No es evitar — es gestionar la activación fisiológica.</p></div></div>
+        <div class="step"><div class="stn">2</div><div class="stb"><h4>Identifica la necesidad detrás del conflicto</h4><p>Detrás de todo argumento hay una necesidad no satisfecha. Seguridad, autonomía, reconocimiento, conexión. ¿Cuál es la tuya? ¿Cuál es la suya?</p></div></div>
+        <div class="step"><div class="stn">3</div><div class="stb"><h4>Expresa con XYZ</h4><p>No con acusaciones. Usa el protocolo: comportamiento específico, situación, emoción tuya.</p></div></div>
+        <div class="step"><div class="stn">4</div><div class="stb"><h4>Escucha activa real</h4><p>Cuando habla, solo escucha. No interrumpas, no planifiques tu respuesta. Cuando termine, di: "Escuché que te sientes X porque Y. ¿Es correcto?"</p></div></div>
+        <div class="step"><div class="stn">5</div><div class="stb"><h4>Busca el "y" no el "o"</h4><p>No "o me das espacio O pasamos tiempo juntos" sino "¿cómo logramos espacio Y tiempo juntos?" Las soluciones integrativas son posibles casi siempre.</p></div></div>
+        <div class="step"><div class="stn">6</div><div class="stb"><h4>Reparación y reconexión</h4><p>Después del conflicto, reconecta físicamente (abrazo, contacto) antes de seguir el día. Los conflictos sin reparación acumulan resentimiento.</p></div></div>
+      </div>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">LOS 4 JINETES — SEÑALES DE ALERTA (Gottman)</div>
+      <table class="tbl">
+        <thead><tr><th>JINETE</th><th>EJEMPLO</th><th>ANTÍDOTO</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Crítica</strong></td><td>"Siempre eres descuidado"</td><td>Queja específica con XYZ</td></tr>
+          <tr><td><strong>Desprecio</strong></td><td>Sarcasmo, burlas, poner los ojos en blanco</td><td>Cultura de apreciación activa</td></tr>
+          <tr><td><strong>Defensividad</strong></td><td>"No es mi culpa, tú..."</td><td>Responsabilidad parcial</td></tr>
+          <tr><td><strong>Stonewalling</strong></td><td>Silencio total, cerrarse</td><td>Pausa fisiológica de 20 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ATRACCIÓN Y CONEXIÓN -->
+  <div class="acc" id="acc-attract">
+    <div class="ah" onclick="togAcc('acc-attract')">
+      <div class="ah-l"><span class="ah-s">❤️</span><span class="ah-t">Atracción y conexión profunda</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <div class="qt"><p>"El amor no es un sentimiento. Es una elección activa y diaria."</p><cite>— ERICH FROMM</cite></div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">LOS 5 LENGUAJES DEL AMOR</div>
+      <div class="steps" style="margin-bottom:1rem;">
+        <div class="step"><div class="stn">01</div><div class="stb"><h4>Palabras de afirmación</h4><p>Elogios específicos, "te amo", notas, mensajes. Poderoso si este es su lenguaje.</p></div></div>
+        <div class="step"><div class="stn">02</div><div class="stb"><h4>Tiempo de calidad</h4><p>Atención total sin distracciones. Actividades compartidas donde estás presente.</p></div></div>
+        <div class="step"><div class="stn">03</div><div class="stb"><h4>Actos de servicio</h4><p>Hacer algo sin que te lo pidan. Cocinar, preparar algo, solucionar un problema.</p></div></div>
+        <div class="step"><div class="stn">04</div><div class="stb"><h4>Regalos</h4><p>Detalles que muestran que pensaste en la persona. No importa el precio.</p></div></div>
+        <div class="step"><div class="stn">05</div><div class="stb"><h4>Contacto físico</h4><p>Abrazos, contacto en conversación, proximidad. Crucial para la vinculación.</p></div></div>
+      </div>
+
+      <div class="field">
+        <div class="flbl">LENGUAJE PRINCIPAL DE MI PAREJA</div>
+        <input type="text" id="love-lang" placeholder="¿Cuál es su lenguaje? ¿Cómo lo expresa?" oninput="saveRel()">
+      </div>
+
+      <hr>
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">GESTOS DE ATRACCIÓN SOSTENIDA — ESTA SEMANA</div>
+      <div id="gestures-list" style="display:flex;flex-direction:column;margin-bottom:.75rem;min-height:40px;"></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <input type="text" id="gesture-input" placeholder="Ej: flores sorpresa, mensaje especial, plan inesperado..." style="flex:1;min-width:180px;">
+        <button class="btn pr sm" onclick="addGestureItem()">+ AGREGAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTONOMÍA Y CONEXIÓN -->
+  <div class="acc" id="acc-auto">
+    <div class="ah" onclick="togAcc('acc-auto')">
+      <div class="ah-l"><span class="ah-s">⚖️</span><span class="ah-t">Balance: autonomía y conexión</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <p style="font-size:13px;color:var(--mu);margin-bottom:1rem;">La trampa de las relaciones maduras: demasiada fusión mata la atracción, demasiada distancia mata la conexión. El equilibrio se negocia, no se asume.</p>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">PRINCIPIOS</div>
+      <div class="rules" style="margin-bottom:1rem;">
+        <div class="rule">Mantén tus metas personales activas — seguir creciendo atrae a tu pareja, la estancación no</div>
+        <div class="rule">Tiempo solo no es abandono — es recarga necesaria. Negocia cuánto necesita cada uno</div>
+        <div class="rule">Amigos propios, hobbies propios, identidad propia. La pareja complementa, no reemplaza</div>
+        <div class="rule">Sorpresa e imprevisibilidad mantienen la dopamina activa. No todo tiene que ser rutina</div>
+        <div class="rule">Misterio requiere espacio. Conocerse todo al segundo es agotador para el deseo</div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--ac);letter-spacing:.16em;margin-bottom:.5rem;">CHEQUEO MENSUAL DE PAREJA — 15 MIN</div>
+      <div class="rules">
+        <div class="rule">¿Qué funcionó bien este mes? Nombra 3 cosas específicas</div>
+        <div class="rule">¿Hay algo que necesite más atención el próximo mes?</div>
+        <div class="rule">¿Cómo está nuestro espacio individual? ¿Alguien necesita más o menos?</div>
+        <div class="rule">¿Cuál fue el mejor momento compartido del mes? ¿Cómo replicarlo?</div>
+        <div class="rule">¿Hay algo sin decir que quieras compartir? (protocolo XYZ si aplica)</div>
+      </div>
+
+      <div class="field" style="margin-top:.75rem;">
+        <div class="flbl">NOTAS DEL CHEQUEO MENSUAL</div>
+        <textarea id="monthly-check" placeholder="Fecha + resumen del check-in del mes..."></textarea>
+      </div>
+      <button class="btn pr" onclick="saveCheck()" style="width:100%;margin-top:.5rem;">GUARDAR CHECK-IN</button>
+    </div>
+  </div>
+
+  <!-- IDEAS DE CITAS -->
+  <div class="lbl">IDEAS DE CITAS</div>
+  <div class="acc open" id="acc-dates">
+    <div class="ah" onclick="togAcc('acc-dates')">
+      <div class="ah-l"><span class="ah-s">🗓</span><span class="ah-t">20 ideas de citas — por presupuesto</span></div>
+      <span class="ah-a">▶</span>
+    </div>
+    <div class="ab">
+      <p style="font-size:13px;color:var(--mu);margin-bottom:.75rem;">Toca una cita para marcarla como realizada.</p>
+      <div style="font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.12em;margin-bottom:.5rem;">SIN COSTO / BAJO COSTO</div>
+      <div class="date-grid" id="dates-low">
+        <div class="date-card" data-id="d1" onclick="toggleDate(this)"><div class="dc-cat">GRATUITO</div><div class="dc-n">Picnic en parque</div><div class="dc-d">Prepara comida juntos, lleva cobija</div></div>
+        <div class="date-card" data-id="d2" onclick="toggleDate(this)"><div class="dc-cat">GRATUITO</div><div class="dc-n">Cocinar receta nueva</div><div class="dc-d">Elige algo desconocido para ambos</div></div>
+        <div class="date-card" data-id="d3" onclick="toggleDate(this)"><div class="dc-cat">GRATUITO</div><div class="dc-n">Ver las estrellas</div><div class="dc-d">Busca un lugar oscuro, trae café</div></div>
+        <div class="date-card" data-id="d4" onclick="toggleDate(this)"><div class="dc-cat">BAJO</div><div class="dc-n">Café + librería</div><div class="dc-d">Elige un libro para el otro</div></div>
+        <div class="date-card" data-id="d5" onclick="toggleDate(this)"><div class="dc-cat">BAJO</div><div class="dc-n">Caminata fotográfica</div><div class="dc-d">Fotografían la ciudad con intención artística</div></div>
+        <div class="date-card" data-id="d6" onclick="toggleDate(this)"><div class="dc-cat">BAJO</div><div class="dc-n">Noche de juegos</div><div class="dc-d">Juegos de mesa + snacks en casa</div></div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.12em;margin:.75rem 0 .5rem;">MEDIO</div>
+      <div class="date-grid" id="dates-mid">
+        <div class="date-card" data-id="d7" onclick="toggleDate(this)"><div class="dc-cat">MEDIO</div><div class="dc-n">Museo o exposición</div><div class="dc-d">Hablar sobre lo que les llama la atención</div></div>
+        <div class="date-card" data-id="d8" onclick="toggleDate(this)"><div class="dc-cat">MEDIO</div><div class="dc-n">Clase de cocina</div><div class="dc-d">Aprendan algo nuevo juntos</div></div>
+        <div class="date-card" data-id="d9" onclick="toggleDate(this)"><div class="dc-cat">MEDIO</div><div class="dc-n">Senderismo + cena</div><div class="dc-d">Naturaleza en la mañana, restaurante en noche</div></div>
+        <div class="date-card" data-id="d10" onclick="toggleDate(this)"><div class="dc-cat">MEDIO</div><div class="dc-n">Concierto local</div><div class="dc-d">Banda emergente o artista que no conocen</div></div>
+        <div class="date-card" data-id="d11" onclick="toggleDate(this)"><div class="dc-cat">MEDIO</div><div class="dc-n">Clases de baile</div><div class="dc-d">1 clase introductoria. Salsa, swing, lo que sea</div></div>
+        <div class="date-card" data-id="d12" onclick="toggleDate(this)"><div class="dc-cat">MEDIO</div><div class="dc-n">Mercado gastronómico</div><div class="dc-d">Probar 5 cosas nuevas cada uno</div></div>
+        <div class="date-card" data-id="d13" onclick="toggleDate(this)"><div class="dc-cat">MEDIO</div><div class="dc-n">Spa en casa</div><div class="dc-d">Masajes, aromaterapia, cena especial</div></div>
+      </div>
+
+      <div style="font-family:monospace;font-size:9px;color:var(--mu);letter-spacing:.12em;margin:.75rem 0 .5rem;">ESPECIAL / ALTA INVERSIÓN</div>
+      <div class="date-grid" id="dates-high">
+        <div class="date-card" data-id="d14" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Escapada de fin de semana</div><div class="dc-d">Ciudad cercana que ninguno conozca bien</div></div>
+        <div class="date-card" data-id="d15" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Cena degustación</div><div class="dc-d">Restaurante de menú de varios tiempos</div></div>
+        <div class="date-card" data-id="d16" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Experiencia nueva juntos</div><div class="dc-d">Paracaídas, alpinismo, kayak — algo primero</div></div>
+        <div class="date-card" data-id="d17" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Concierto de artista favorito</div><div class="dc-d">Planea con anticipación. Memorias duran</div></div>
+        <div class="date-card" data-id="d18" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Clase de arte juntos</div><div class="dc-d">Cerámica, pintura, escultura — crear algo</div></div>
+        <div class="date-card" data-id="d19" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Noche sorpresa</div><div class="dc-d">Planea todo en secreto — destino revelado</div></div>
+        <div class="date-card" data-id="d20" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Viaje planeado juntos</div><div class="dc-d">La planeación del viaje ya es la cita</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOMENTOS ESPECIALES -->
+  <div class="lbl">MOMENTOS ESPECIALES DEL MES</div>
+  <div class="card">
+    <span class="clbl">CALENDARIO DE MOMENTOS</span>
+    <div id="moments-list" style="display:flex;flex-direction:column;margin-bottom:.75rem;min-height:30px;"></div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:flex-end;">
+      <div style="flex:1;min-width:180px;">
+        <input type="text" id="moment-input" placeholder="Describe el momento especial...">
+      </div>
+      <button class="btn pr sm" onclick="addMoment()">+ AGREGAR</button>
+    </div>
+    <div style="margin-top:.75rem;font-family:monospace;font-size:9px;color:var(--mu);">Meta: al menos 1 momento especial por semana — algo que recuerden en 5 años.</div>
+  </div>
+
+</main>
+
+<nav class="botnav">
+  <a href="index.html" class="bn"><span class="bns">◈</span><span>HOY</span></a>
+  <a href="fisico.html" class="bn"><span class="bns">◉</span><span>FÍSICO</span></a>
+  <a href="mental.html" class="bn"><span class="bns">◎</span><span>MENTE</span></a>
+  <a href="economico-social.html" class="bn"><span class="bns">◆</span><span>DINERO</span></a>
+  <a href="relacion.html" class="bn on"><span class="bns">○</span><span>AMOR</span></a>
+</nav>
+
+<script>
+const R={
+  today:()=>new Date().toISOString().slice(0,10),
+  get:(k,d=null)=>{try{return JSON.parse(localStorage.getItem('rt_'+k))??d}catch{return d}},
+  set:(k,v)=>{try{localStorage.setItem('rt_'+k,JSON.stringify(v))}catch{}}
+};
+function togAcc(id){document.getElementById(id).classList.toggle('open');}
+
+// ── Rel data ──────────────────────────────────────────
+let relData={dates:0,gestures:0,moments:[],gesture_items:[],date_done:{},xyz:'',love_lang:'',monthly_check:''};
+
+function loadRel(){
+  relData=R.get('rel',relData);
+  renderRelStats();
+  renderGestures();
+  renderMoments();
+  renderDateDone();
+  if(relData.xyz)document.getElementById('xyz-practice').value=relData.xyz;
+  if(relData.love_lang)document.getElementById('love-lang').value=relData.love_lang;
+  if(relData.monthly_check)document.getElementById('monthly-check').value=relData.monthly_check;
+}
+
+function saveRel(){
+  relData.love_lang=document.getElementById('love-lang').value;
+  R.set('rel',relData);
+}
+
+function renderRelStats(){
+  document.getElementById('dates-count').textContent=relData.dates||0;
+  document.getElementById('gestures-count').textContent=relData.gestures||0;
+  document.getElementById('moments-count').textContent=(relData.moments||[]).length;
+  const pct=Math.min(100,Math.round(((relData.dates||0)/4*0.5+(relData.gestures||0)/8*0.5)*100));
+  document.getElementById('rel-pct').textContent=pct+'%';
+  document.getElementById('rel-bar').style.width=pct+'%';
+  document.getElementById('spill').textContent=pct+'%';
+}
+
+// ── Dates & Gestures counters ─────────────────────────
+function addDate(){
+  relData.dates=(relData.dates||0)+1;
+  R.set('rel',relData);renderRelStats();
+}
+function addGesture(){
+  relData.gestures=(relData.gestures||0)+1;
+  R.set('rel',relData);renderRelStats();
+}
+
+// ── Gesture items ─────────────────────────────────────
+function renderGestures(){
+  const list=document.getElementById('gestures-list');
+  if(!list)return;
+  list.innerHTML='';
+  (relData.gesture_items||[]).forEach((g,i)=>{
+    list.innerHTML+=`<div style="display:flex;align-items:center;gap:.5rem;padding:.5rem 0;border-bottom:1px solid var(--br);"><span style="font-size:13px;flex:1;">${g}</span><button style="background:none;border:none;color:var(--mu2);cursor:pointer;font-size:1rem;transition:color .15s;" onmouseover="this.style.color='var(--rd)'" onmouseout="this.style.color='var(--mu2)'" onclick="delGestureItem(${i})">×</button></div>`;
+  });
+}
+function addGestureItem(){
+  const v=document.getElementById('gesture-input').value.trim();
+  if(!v)return;
+  if(!relData.gesture_items)relData.gesture_items=[];
+  relData.gesture_items.push(v);
+  relData.gestures=(relData.gestures||0)+1;
+  R.set('rel',relData);
+  document.getElementById('gesture-input').value='';
+  renderGestures();renderRelStats();
+}
+function delGestureItem(i){relData.gesture_items.splice(i,1);R.set('rel',relData);renderGestures();}
+
+// ── Moments ───────────────────────────────────────────
+function renderMoments(){
+  const list=document.getElementById('moments-list');
+  list.innerHTML='';
+  (relData.moments||[]).forEach((m,i)=>{
+    list.innerHTML+=`<div class="moment-row"><span class="moment-date">${m.date}</span><span class="moment-desc">${m.desc}</span><button style="background:none;border:none;color:var(--mu2);cursor:pointer;font-size:1rem;" onclick="delMoment(${i})">×</button></div>`;
+  });
+}
+function addMoment(){
+  const v=document.getElementById('moment-input').value.trim();
+  if(!v)return;
+  if(!relData.moments)relData.moments=[];
+  relData.moments.push({desc:v,date:new Date().toLocaleDateString('es')});
+  R.set('rel',relData);
+  document.getElementById('moment-input').value='';
+  renderMoments();renderRelStats();
+}
+function delMoment(i){relData.moments.splice(i,1);R.set('rel',relData);renderMoments();renderRelStats();}
+
+// ── Date cards ────────────────────────────────────────
+function toggleDate(el){
+  el.classList.toggle('done');
+  const id=el.dataset.id;
+  if(!relData.date_done)relData.date_done={};
+  relData.date_done[id]=el.classList.contains('done');
+  if(relData.date_done[id])relData.dates=(relData.dates||0)+1;
+  else relData.dates=Math.max(0,(relData.dates||0)-1);
+  R.set('rel',relData);renderRelStats();
+}
+function renderDateDone(){
+  document.querySelectorAll('.date-card[data-id]').forEach(el=>{
+    if(relData.date_done&&relData.date_done[el.dataset.id])el.classList.add('done');
+  });
+}
+
+// ── XYZ & other save ─────────────────────────────────
+function saveXYZ(){relData.xyz=document.getElementById('xyz-practice').value;R.set('rel',relData);alert('Guardado.');}
+function saveCheck(){relData.monthly_check=document.getElementById('monthly-check').value;R.set('rel',relData);alert('Check-in guardado.');}
+
+// ── Init ──────────────────────────────────────────────
+loadRel();
+</script>
+</body>
+</html>

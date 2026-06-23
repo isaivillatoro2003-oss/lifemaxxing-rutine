@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUTINE</title>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --bg3: #161616;
+            --border: #1e1e1e;
+            --border2: #2a2a2a;
+            --text: #e2e2e2;
+            --muted: #565656;
+            --accent: #c9a96e;
+            --accent-dim: #7a6140;
+            --red: #c0392b;
+            --green: #27ae60;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            min-height: 100vh;
+            line-height: 1.65;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 2.5rem;
+            height: 54px;
+            gap: 2.5rem;
+        }
+
+        .nav-brand {
+            font-family: monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+        }
+
+        .nav-tab {
+            padding: 0 1.25rem;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            transition: color 0.15s, border-color 0.15s;
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        .nav-tab:hover { color: var(--text); }
+        .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* ─── MAIN ─── */
+        main { padding-top: 54px; }
+
+        .tab-content {
+            display: none;
+            padding: 3rem 2.5rem;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active { display: block; }
+
+        /* ─── TYPOGRAPHY ─── */
+        h2 {
+            font-family: monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: normal;
+            margin-bottom: 0.4rem;
+        }
+
+        .page-sub {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            font-family: monospace;
+        }
+
+        h3 {
+            font-family: monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.25em;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: normal;
+            margin-bottom: 0.85rem;
+        }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-label {
+            font-family: monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.28em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 1.1rem;
+        }
+
+        /* ─── GRID ─── */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+        /* ─── HOY ─── */
+        .time-block { margin-bottom: 2.5rem; }
+
+        .clock {
+            font-family: monospace;
+            font-size: 3.8rem;
+            color: var(--text);
+            letter-spacing: 0.04em;
+            line-height: 1;
+        }
+
+        .date-str {
+            font-family: monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .quote-block {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 0;
+            margin-bottom: 2.5rem;
+        }
+
+        .quote-text {
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--muted);
+        }
+
+        .quote-author {
+            font-style: normal;
+            font-family: monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            color: var(--accent-dim);
+            margin-top: 0.5rem;
+        }
+
+        /* Checklist */
+        .checklist { background: var(--bg2); border: 1px solid var(--border); }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .check-item:last-child { border-bottom: none; }
+        .check-item.done { opacity: 0.35; }
+        .check-item.done .check-label { text-decoration: line-through; }
+
+        .check-box {
+            width: 16px; height: 16px;
+            border: 1px solid var(--muted);
+            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .check-item.done .check-box {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .check-mark { display: none; color: var(--bg); font-size: 0.6rem; }
+        .check-item.done .check-mark { display: block; }
+
+        .check-label { font-size: 0.88rem; flex: 1; }
+
+        .check-time {
+            font-family: monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+        }
+
+        /* Calorie tracker */
+        .cal-big {
+            font-family: monospace;
+            font-size: 2.8rem;
+            color: var(--text);
+        }
+
+        .cal-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border2);
+            color: var(--text);
+            font-family: monospace;
+            font-size: 2.8rem;
+            width: 140px;
+            outline: none;
+        }
+
+        .cal-input:focus { border-bottom-color: var(--accent); }
+
+        .cal-bar-wrap {
+            height: 3px;
+            background: var(--border);
+            margin: 0.75rem 0 0.4rem;
+        }
+
+        .cal-bar {
+            height: 3px;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .cal-remaining {
+            font-family: monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+            text-align: right;
+            letter-spacing: 0.1em;
+        }
+
+        .macro-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .macro-cell { text-align: center; }
+
+        .macro-num {
+            font-family: monospace;
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .macro-inp {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border2);
+            color: var(--text);
+            font-family: monospace;
+            font-size: 1.3rem;
+            width: 70px;
+            text-align: center;
+            outline: none;
+        }
+
+        .macro-inp:focus { border-bottom-color: var(--accent); }
+
+        .macro-lbl {
+            font-family: monospace;
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-top: 0.3rem;
+        }
+
+        .water-ctrl {
+            display: flex;
+            gap: 0.3rem;
+            justify-content: center;
+            margin-top: 0.4rem;
+        }
+
+        .wbtn {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            width: 22px; height: 22px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            line-height: 1;
+            transition: color 0.15s, border-color 0.15s;
+        }
+
+        .wbtn:hover { color: var(--accent); border-color: var(--accent); }
+
+        /* Habit dots */
+        .habit-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.55rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .habit-row:last-child { border-bottom: none; }
+
+        .habit-name {
+            font-size: 0.82rem;
+            flex: 1;
+        }
+
+        .habit-dots { display: flex; gap: 0.3rem; }
+
+        .h-dot {
+            width: 20px; height: 20px;
+            border: 1px solid var(--border2);
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 0.52rem;
+            color: var(--muted);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s;
+            user-select: none;
+        }
+
+        .h-dot.on {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg);
+        }
+
+        /* ─── GYM ─── */
+        .day-selector {
+            display: flex;
+            gap: 0.4rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .day-btn {
+            padding: 0.45rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-transform: uppercase;
+        }
+
+        .day-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .day-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+        .ex-table { width: 100%; border-collapse: collapse; }
+
+        .ex-table th {
+            font-family: monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+            text-transform: uppercase;
+            text-align: left;
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ex-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+
+        .ex-table tr:last-child td { border-bottom: none; }
+        .ex-table tbody tr:hover td { background: var(--bg3); }
+
+        .muscle {
+            font-family: monospace;
+            font-size: 0.58rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+        }
+
+        /* ─── RUN ─── */
+        .fc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+
+        .fc-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            padding: 1rem;
+        }
+
+        .fc-name {
+            font-family: monospace;
+            font-size: 0.58rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            margin-bottom: 0.4rem;
+        }
+
+        .fc-desc { font-size: 0.82rem; color: var(--muted); }
+
+        .week-acc { margin-bottom: 0.5rem; }
+
+        .week-head {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            user-select: none;
+        }
+
+        .week-head:hover { background: var(--bg3); }
+
+        .week-body {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 1.25rem 1.5rem;
+            display: none;
+        }
+
+        .week-body.open { display: block; }
+
+        .run-row {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .run-row:last-child { border-bottom: none; }
+
+        .run-day-lbl {
+            font-family: monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+            min-width: 36px;
+            padding-top: 0.1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .run-info { font-size: 0.88rem; flex: 1; }
+
+        .run-zone {
+            font-family: monospace;
+            font-size: 0.6rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            flex-shrink: 0;
+        }
+
+        /* ─── MEDITACIÓN ─── */
+        .timer-presets {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .preset-btn {
+            padding: 0.35rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: monospace;
+            font-size: 0.62rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            letter-spacing: 0.15em;
+        }
+
+        .preset-btn:hover, .preset-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .timer-face {
+            font-family: monospace;
+            font-size: 5rem;
+            color: var(--text);
+            text-align: center;
+            letter-spacing: 0.08em;
+            margin: 1.5rem 0;
+        }
+
+        .timer-ctrl {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.7rem 2rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-transform: uppercase;
+        }
+
+        .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        .btn.primary {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+        hr.div { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+        /* Routine steps */
+        .step-list { background: var(--bg2); border: 1px solid var(--border); }
+
+        .step-item {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step-item:last-child { border-bottom: none; }
+
+        .step-n {
+            font-family: monospace;
+            font-size: 0.62rem;
+            color: var(--accent);
+            min-width: 22px;
+            padding-top: 0.15rem;
+        }
+
+        .step-body h4 {
+            font-size: 0.92rem;
+            font-weight: normal;
+            margin-bottom: 0.2rem;
+        }
+
+        .step-body p {
+            font-family: monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        /* ─── NUTRICIÓN ─── */
+        .meal-block {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .meal-top {
+            padding: 0.9rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .meal-title {
+            font-family: monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .meal-cals {
+            font-family: monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+        }
+
+        .meal-inner { padding: 1.25rem 1.5rem; }
+
+        .ing-list { list-style: none; margin-bottom: 1rem; }
+
+        .ing-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        .ing-list li:last-child { border-bottom: none; }
+
+        .ing-macro {
+            font-family: monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+        }
+
+        .recipe { margin-top: 0.75rem; }
+
+        .r-step {
+            font-size: 0.82rem;
+            color: var(--muted);
+            padding: 0.25rem 0 0.25rem 1.5rem;
+            position: relative;
+        }
+
+        .r-step::before {
+            content: attr(data-n) '.';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+
+        /* Rules list */
+        .rule-list { font-size: 0.82rem; color: var(--muted); display: grid; gap: 0.45rem; }
+        .rule-list div::before { content: '— '; color: var(--accent-dim); }
+
+        /* Intention textarea */
+        textarea.intention-input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'Georgia', serif;
+            font-size: 0.9rem;
+            width: 100%;
+            min-height: 110px;
+            resize: none;
+            outline: none;
+            line-height: 1.7;
+        }
+
+        textarea.intention-input::placeholder { color: var(--muted); font-style: italic; }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            nav { padding: 0 1rem; gap: 1rem; }
+            .nav-tab { padding: 0 0.6rem; font-size: 0.58rem; }
+            .tab-content { padding: 2rem 1rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-3, .fc-grid { grid-template-columns: 1fr 1fr; }
+            .grid-4, .macro-row { grid-template-columns: 1fr 1fr; }
+            .clock { font-size: 2.5rem; }
+            .timer-face { font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <span class="nav-brand">RUTINE</span>
+    <div class="nav-tabs">
+        <div class="nav-tab active"  onclick="go('hoy',this)">HOY</div>
+        <div class="nav-tab"         onclick="go('gym',this)">GYM</div>
+        <div class="nav-tab"         onclick="go('run',this)">RUN</div>
+        <div class="nav-tab"         onclick="go('mente',this)">MENTE</div>
+        <div class="nav-tab"         onclick="go('look',this)">LOOK</div>
+        <div class="nav-tab"         onclick="go('nut',this)">NUTRICIÓN</div>
+    </div>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════ HOY ══════════════════════════════ -->
+<div id="tab-hoy" class="tab-content active">
+
+    <div class="time-block">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date-str" id="datestr">—</div>
+    </div>
+
+    <div class="quote-block">
+        <div class="quote-text" id="daily-quote">"La disciplina es la puente entre metas y logros."</div>
+        <div class="quote-author" id="quote-auth">— JIM ROHN</div>
+    </div>
+
+    <div class="grid-2">
+        <div>
+            <h3>Rutina matutina</h3>
+            <div class="checklist">
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Despertar sin snooze</span>
+                    <span class="check-time">05:30</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">500ml agua fría en ayunas</span>
+                    <span class="check-time">05:32</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Skincare AM + SPF</span>
+                    <span class="check-time">05:35</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Meditación 10 min</span>
+                    <span class="check-time">05:45</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Desayuno alto en proteína</span>
+                    <span class="check-time">06:00</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Entrenamiento / Cardio</span>
+                    <span class="check-time">07:00</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Ducha fría (30 seg finales)</span>
+                    <span class="check-time">08:30</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">10 min sol matutino</span>
+                    <span class="check-time">08:45</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Rutina nocturna</h3>
+            <div class="checklist">
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Registrar calorías del día</span>
+                    <span class="check-time">21:00</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Skincare PM + retinol</span>
+                    <span class="check-time">21:15</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Sin pantallas (modo avión)</span>
+                    <span class="check-time">21:30</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Lectura 20 min</span>
+                    <span class="check-time">21:35</span>
+                </div>
+                <div class="check-item" onclick="chk(this)">
+                    <div class="check-box"><span class="check-mark">✓</span></div>
+                    <span class="check-label">Dormido a las 22:00</span>
+                    <span class="check-time">22:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h3>Calorías del día</h3>
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.3rem;">
+                    <span style="font-family:monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.12em;">CONSUMIDAS</span>
+                    <span style="font-family:monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.12em;">META · 2000 KCAL</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:0.4rem;">
+                    <input type="number" id="cal-in" class="cal-input" value="0" min="0" max="9999" oninput="updCal()">
+                    <span style="font-family:monospace;font-size:1rem;color:var(--muted);">kcal</span>
+                </div>
+                <div class="cal-bar-wrap"><div class="cal-bar" id="cal-bar"></div></div>
+                <div class="cal-remaining" id="cal-rest">2000 restantes</div>
+
+                <div class="macro-row">
+                    <div class="macro-cell">
+                        <input type="number" class="macro-inp" value="0" min="0">
+                        <div class="macro-lbl">Proteína g</div>
+                    </div>
+                    <div class="macro-cell">
+                        <input type="number" class="macro-inp" value="0" min="0">
+                        <div class="macro-lbl">Carbs g</div>
+                    </div>
+                    <div class="macro-cell">
+                        <input type="number" class="macro-inp" value="0" min="0">
+                        <div class="macro-lbl">Grasa g</div>
+                    </div>
+                    <div class="macro-cell">
+                        <div class="macro-num" id="water-disp">0 L</div>
+                        <div class="macro-lbl">Agua</div>
+                        <div class="water-ctrl">
+                            <button class="wbtn" onclick="adjWater(-1)">−</button>
+                            <button class="wbtn" onclick="adjWater(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Hábitos — semana actual</h3>
+            <div class="card" style="padding:1rem 1.25rem;">
+                <div class="habit-row">
+                    <span class="habit-name">Gym</span>
+                    <div class="habit-dots" id="h-gym"></div>
+                </div>
+                <div class="habit-row">
+                    <span class="habit-name">Correr</span>
+                    <div class="habit-dots" id="h-run"></div>
+                </div>
+                <div class="habit-row">
+                    <span class="habit-name">Meditar</span>
+                    <div class="habit-dots" id="h-med"></div>
+                </div>
+                <div class="habit-row">
+                    <span class="habit-name">Skincare</span>
+                    <div class="habit-dots" id="h-skin"></div>
+                </div>
+                <div class="habit-row">
+                    <span class="habit-name">Leer</span>
+                    <div class="habit-dots" id="h-read"></div>
+                </div>
+                <div class="habit-row" style="border:none;">
+                    <span class="habit-name">Sin azúcar</span>
+                    <div class="habit-dots" id="h-sugar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════ GYM ══════════════════════════════ -->
+<div id="tab-gym" class="tab-content">
+    <h2>Programa de entrenamiento</h2>
+    <p class="page-sub">Push / Pull / Legs · 6 días/semana · Déficit calórico — retención muscular prioritaria</p>
+
+    <div class="day-selector">
+        <button class="day-btn active" onclick="showDay('push1',this)">PUSH I</button>
+        <button class="day-btn"        onclick="showDay('pull1',this)">PULL I</button>
+        <button class="day-btn"        onclick="showDay('legs1',this)">LEGS I</button>
+        <button class="day-btn"        onclick="showDay('push2',this)">PUSH II</button>
+        <button class="day-btn"        onclick="showDay('pull2',this)">PULL II</button>
+        <button class="day-btn"        onclick="showDay('legs2',this)">LEGS II</button>
+        <button class="day-btn"        onclick="showDay('rest',this)">DESCANSO</button>
+    </div>
+
+    <!-- PUSH I -->
+    <div id="gd-push1" class="gym-day card" style="padding:0;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);"><span class="card-label">Push I — Pecho · Hombros · Tríceps (Fuerza)</span></div>
+        <table class="ex-table">
+            <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th><th>Grupo</th></tr></thead>
+            <tbody>
+                <tr><td>Press banca plano (barra)</td><td>4</td><td>5–7</td><td>3 min</td><td><span class="muscle">PECHO</span></td></tr>
+                <tr><td>Press inclinado (mancuernas)</td><td>3</td><td>8–10</td><td>2 min</td><td><span class="muscle">PECHO ALTO</span></td></tr>
+                <tr><td>Press militar (barra)</td><td>4</td><td>5–7</td><td>3 min</td><td><span class="muscle">HOMBRO</span></td></tr>
+                <tr><td>Elevaciones laterales</td><td>4</td><td>12–15</td><td>90 s</td><td><span class="muscle">DELTOIDES</span></td></tr>
+                <tr><td>Fondos en paralelas</td><td>3</td><td>8–12</td><td>90 s</td><td><span class="muscle">TRÍCEPS</span></td></tr>
+                <tr><td>Extensión tríceps polea alta</td><td>3</td><td>12–15</td><td>60 s</td><td><span class="muscle">TRÍCEPS</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PULL I -->
+    <div id="gd-pull1" class="gym-day card" style="display:none;padding:0;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);"><span class="card-label">Pull I — Espalda · Bíceps (Fuerza)</span></div>
+        <table class="ex-table">
+            <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th><th>Grupo</th></tr></thead>
+            <tbody>
+                <tr><td>Peso muerto convencional</td><td>4</td><td>4–6</td><td>3 min</td><td><span class="muscle">CADENA POST</span></td></tr>
+                <tr><td>Dominadas (con peso si es posible)</td><td>4</td><td>5–8</td><td>2 min</td><td><span class="muscle">DORSAL</span></td></tr>
+                <tr><td>Remo con barra (supino)</td><td>4</td><td>6–8</td><td>2 min</td><td><span class="muscle">ESPALDA MEDIA</span></td></tr>
+                <tr><td>Remo sentado en polea</td><td>3</td><td>10–12</td><td>90 s</td><td><span class="muscle">DORSAL</span></td></tr>
+                <tr><td>Face pulls</td><td>3</td><td>15–20</td><td>60 s</td><td><span class="muscle">MANGUITO</span></td></tr>
+                <tr><td>Curl de bíceps (barra)</td><td>3</td><td>6–8</td><td>90 s</td><td><span class="muscle">BÍCEPS</span></td></tr>
+                <tr><td>Curl martillo (mancuernas)</td><td>3</td><td>10–12</td><td>60 s</td><td><span class="muscle">BRAQUIAL</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- LEGS I -->
+    <div id="gd-legs1" class="gym-day card" style="display:none;padding:0;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);"><span class="card-label">Legs I — Cuádriceps · Glúteos (Fuerza)</span></div>
+        <table class="ex-table">
+            <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th><th>Grupo</th></tr></thead>
+            <tbody>
+                <tr><td>Sentadilla barra (trasera)</td><td>4</td><td>5–7</td><td>3 min</td><td><span class="muscle">CUÁDRICEPS</span></td></tr>
+                <tr><td>Prensa 45°</td><td>3</td><td>10–12</td><td>2 min</td><td><span class="muscle">CUÁDRICEPS</span></td></tr>
+                <tr><td>Extensión de pierna</td><td>3</td><td>12–15</td><td>90 s</td><td><span class="muscle">CUÁDRICEPS</span></td></tr>
+                <tr><td>Peso muerto rumano</td><td>3</td><td>8–10</td><td>2 min</td><td><span class="muscle">ISQUIOS</span></td></tr>
+                <tr><td>Curl femoral acostado</td><td>3</td><td>12–15</td><td>90 s</td><td><span class="muscle">ISQUIOS</span></td></tr>
+                <tr><td>Elevación de talones de pie</td><td>4</td><td>15–20</td><td>60 s</td><td><span class="muscle">GEMELOS</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PUSH II -->
+    <div id="gd-push2" class="gym-day card" style="display:none;padding:0;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);"><span class="card-label">Push II — Pecho · Hombros · Tríceps (Volumen)</span></div>
+        <table class="ex-table">
+            <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th><th>Grupo</th></tr></thead>
+            <tbody>
+                <tr><td>Press inclinado mancuernas</td><td>4</td><td>10–12</td><td>90 s</td><td><span class="muscle">PECHO ALTO</span></td></tr>
+                <tr><td>Aperturas en cable cruzado</td><td>3</td><td>12–15</td><td>60 s</td><td><span class="muscle">PECHO</span></td></tr>
+                <tr><td>Press Arnold</td><td>3</td><td>10–12</td><td>90 s</td><td><span class="muscle">HOMBRO</span></td></tr>
+                <tr><td>Elevaciones laterales en cable</td><td>4</td><td>15–20</td><td>60 s</td><td><span class="muscle">DELTOIDES</span></td></tr>
+                <tr><td>Press francés (EZ)</td><td>3</td><td>10–12</td><td>90 s</td><td><span class="muscle">TRÍCEPS</span></td></tr>
+                <tr><td>Kickbacks en cable</td><td>3</td><td>12–15</td><td>60 s</td><td><span class="muscle">TRÍCEPS</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PULL II -->
+    <div id="gd-pull2" class="gym-day card" style="display:none;padding:0;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);"><span class="card-label">Pull II — Espalda · Bíceps (Volumen)</span></div>
+        <table class="ex-table">
+            <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th><th>Grupo</th></tr></thead>
+            <tbody>
+                <tr><td>Jalón al pecho (agarre ancho)</td><td>4</td><td>10–12</td><td>90 s</td><td><span class="muscle">DORSAL</span></td></tr>
+                <tr><td>Remo unilateral con mancuerna</td><td>4</td><td>10–12 c/lado</td><td>90 s</td><td><span class="muscle">ESPALDA MEDIA</span></td></tr>
+                <tr><td>Pull-over en polea (cuerda)</td><td>3</td><td>12–15</td><td>60 s</td><td><span class="muscle">DORSAL</span></td></tr>
+                <tr><td>Encogimientos con mancuernas</td><td>3</td><td>12–15</td><td>60 s</td><td><span class="muscle">TRAPECIO</span></td></tr>
+                <tr><td>Curl concentrado</td><td>3</td><td>12–15 c/lado</td><td>60 s</td><td><span class="muscle">BÍCEPS</span></td></tr>
+                <tr><td>Curl en polea baja (cuerda)</td><td>3</td><td>12–15</td><td>60 s</td><td><span class="muscle">BÍCEPS</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- LEGS II -->
+    <div id="gd-legs2" class="gym-day card" style="display:none;padding:0;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);"><span class="card-label">Legs II — Isquios · Glúteos (Volumen)</span></div>
+        <table class="ex-table">
+            <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th><th>Grupo</th></tr></thead>
+            <tbody>
+                <tr><td>Hip thrust (barra)</td><td>4</td><td>10–12</td><td>90 s</td><td><span class="muscle">GLÚTEOS</span></td></tr>
+                <tr><td>Sentadilla búlgara</td><td>3</td><td>10–12 c/lado</td><td>90 s</td><td><span class="muscle">GLÚTEOS / QUAD</span></td></tr>
+                <tr><td>Peso muerto piernas rígidas</td><td>4</td><td>10–12</td><td>2 min</td><td><span class="muscle">ISQUIOS</span></td></tr>
+                <tr><td>Curl femoral sentado</td><td>3</td><td>12–15</td><td>90 s</td><td><span class="muscle">ISQUIOS</span></td></tr>
+                <tr><td>Abducción en cable (de pie)</td><td>3</td><td>15–20 c/lado</td><td>60 s</td><td><span class="muscle">GLÚTEO MED</span></td></tr>
+                <tr><td>Elevación de talones sentado</td><td>4</td><td>15–20</td><td>60 s</td><td><span class="muscle">SÓLEO</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DESCANSO -->
+    <div id="gd-rest" class="gym-day" style="display:none;">
+        <div class="card">
+            <div class="card-label">Recuperación activa</div>
+            <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">El músculo crece durante el descanso. Este día es tan importante como el entrenamiento.</p>
+            <div class="checklist">
+                <div class="check-item" onclick="chk(this)"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Caminata 40–50 min (zona 1)</span></div>
+                <div class="check-item" onclick="chk(this)"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Stretching dinámico 15 min</span></div>
+                <div class="check-item" onclick="chk(this)"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Foam roller en grupos trabajados</span></div>
+                <div class="check-item" onclick="chk(this)"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Dormir 8–9 horas esta noche</span></div>
+                <div class="check-item" onclick="chk(this)" style="border:none;"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Proteína en todas las comidas</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+        <div class="card-label">Principios de entrenamiento en cut</div>
+        <div class="rule-list">
+            <div>Progresión de carga semanal — aunque sea +0.5kg o +1 rep</div>
+            <div>RIR 1–2 en ejercicios compuestos · Falla controlada en accesorios</div>
+            <div>Cardio siempre después del gym o en sesión separada</div>
+            <div>Prioriza sueño sobre sesión extra si estás en déficit severo</div>
+            <div>10,000 pasos diarios además del gym · El NEAT quema más de lo que crees</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════ RUN ══════════════════════════════ -->
+<div id="tab-run" class="tab-content">
+    <h2>Programa de cardio</h2>
+    <p class="page-sub">4 semanas progresivas · 3–4 sesiones/semana · Zona 2 prioritaria para oxidar grasa sin catabolizar músculo</p>
+
+    <div class="card" style="margin-bottom:2rem;">
+        <div class="card-label">Zonas de frecuencia cardíaca</div>
+        <div class="fc-grid">
+            <div class="fc-card">
+                <div class="fc-name">ZONA 1 — RECUPERACIÓN</div>
+                <div class="fc-desc">50–60% FCmáx · Caminata activa · Conversación completa</div>
+            </div>
+            <div class="fc-card" style="border-color: var(--accent-dim);">
+                <div class="fc-name">ZONA 2 — BASE AERÓBICA ★</div>
+                <div class="fc-desc">60–70% FCmáx · Trote suave · Puedes hablar en frases</div>
+            </div>
+            <div class="fc-card">
+                <div class="fc-name">ZONA 4 — TEMPO / INTERVALOS</div>
+                <div class="fc-desc">80–90% FCmáx · Ritmo de carrera · Solo palabras sueltas</div>
+            </div>
+        </div>
+        <p style="font-size:0.72rem;color:var(--muted);font-family:monospace;margin-top:1rem;">FCmáx estimada = 220 − tu edad · Zona 2 = FCmáx × 0.65</p>
+    </div>
+
+    <div class="week-acc">
+        <div class="week-head" onclick="togWeek('w1')"><span>SEMANA 1 — BASE AERÓBICA</span><span id="arr-w1">▾</span></div>
+        <div id="wb-w1" class="week-body open">
+            <div class="run-row"><span class="run-day-lbl">LUN</span><span class="run-info">Trote suave 20 min · Calentamiento 5 min caminando</span><span class="run-zone">ZONA 2</span></div>
+            <div class="run-row"><span class="run-day-lbl">MIÉ</span><span class="run-info">Trote suave 20 min · Enfriamiento 5 min caminando</span><span class="run-zone">ZONA 2</span></div>
+            <div class="run-row"><span class="run-day-lbl">VIE</span><span class="run-info">Trote continuo 25 min sin parar</span><span class="run-zone">ZONA 2</span></div>
+            <div class="run-row"><span class="run-day-lbl">DOM</span><span class="run-info">Caminata activa 45 min · Recuperación</span><span class="run-zone">ZONA 1</span></div>
+        </div>
+    </div>
+
+    <div class="week-acc">
+        <div class="week-head" onclick="togWeek('w2')"><span>SEMANA 2 — INTRODUCCIÓN A INTERVALOS</span><span id="arr-w2">▾</span></div>
+        <div id="wb-w2" class="week-body">
+            <div class="run-row"><span class="run-day-lbl">LUN</span><span class="run-info">Trote suave 25 min</span><span class="run-zone">ZONA 2</span></div>
+            <div class="run-row"><span class="run-day-lbl">MAR</span><span class="run-info">Intervalos · 5 min calentamiento → 6× (1 min rápido / 2 min suave) → 5 min enfriamiento</span><span class="run-zone">ZONA 4</span></div>
+            <div class="run-row"><span class="run-day-lbl">JUE</span><span class="run-info">Trote suave 30 min</span><span class="run-zone">ZONA 2</span></div>
+            <div class="run-row"><span class="run-day-lbl">SAB</span><span class="run-info">Carrera larga 35 min · Ritmo cómodo sin parar</span><span class="run-zone">ZONA 2</span></div>
+        </div>
+    </div>
+
+    <div class="week-acc">
+        <div class="week-head" onclick="togWeek('w3')"><span>SEMANA 3 — INTENSIDAD PROGRESIVA</span><span id="arr-w3">▾</span></div>
+        <div id="wb-w3" class="week-body">
+            <div class="run-row"><span class="run-day-lbl">LUN</span><span class="run-info">Trote suave 30 min</span><span class="run-zone">ZONA 2</span></div>
+            <div class="run-row"><span class="run-day-lbl">MAR</span><span class="run-info">Intervalos · 5 min calentamiento → 8× (1 min máximo / 90 seg suave) → 5 min enfriamiento</span><span class="run-zone">ZONA 4</span></div>
+            <div class="run-row"><span class="run-day-lbl">JUE</span><span class="run-info">Tempo run · 10 min fácil → 15 min a ritmo tempo → 10 min fácil</span><span class="run-zone">ZONA 3–4</span></div>
+            <div class="run-row"><span class="run-day-lbl">SAB</span><span class="run-info">Carrera larga 40 min</span><span class="run-zone">ZONA 2</span></div>
+        </div>
+    </div>
+
+    <div class="week-acc">
+        <div class="week-head" onclick="togWeek('w4')"><span>SEMANA 4 — PEAK DEL MES</span><span id="arr-w4">▾</span></div>
+        <div id="wb-w4" class="week-body">
+            <div class="run-row"><span class="run-day-lbl">LUN</span><span class="run-info">Trote suave 30 min · Recuperación activa</span><span class="run-zone">ZONA 2</span></div>
+            <div class="run-row"><span class="run-day-lbl">MAR</span><span class="run-info">Intervalos · 5 min calentamiento → 10× (1 min sprint / 2 min suave) → 5 min enfriamiento</span><span class="run-zone">ZONA 4–5</span></div>
+            <div class="run-row"><span class="run-day-lbl">JUE</span><span class="run-info">Tempo run · 10 min fácil → 20 min tempo → 10 min fácil</span><span class="run-zone">ZONA 3–4</span></div>
+            <div class="run-row"><span class="run-day-lbl">SAB</span><span class="run-info">Carrera larga 45 min · Evaluación de progreso vs semana 1</span><span class="run-zone">ZONA 2</span></div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:1.5rem;">
+        <div class="card-label">Reglas del cardio en cut</div>
+        <div class="rule-list">
+            <div>Cardio siempre después del gym · Nunca antes de las pesas</div>
+            <div>Si sientes fatiga excesiva, reduce a 2 sesiones/semana · El músculo es primero</div>
+            <div>Zona 2 = el tool principal · Quema grasa, preserva músculo, mejora aeróbica base</div>
+            <div>Hidratación: 500ml antes, 250ml cada 20 min corriendo</div>
+            <div>Zapatillas con amortiguación si corres en asfalto · Rodillas primero</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════ MENTE ══════════════════════════════ -->
+<div id="tab-mente" class="tab-content">
+    <h2>Mente y meditación</h2>
+    <p class="page-sub">La disciplina mental construye el físico. No al revés.</p>
+
+    <div class="timer-presets">
+        <button class="preset-btn active" onclick="setMins(5,this)">5 MIN</button>
+        <button class="preset-btn"         onclick="setMins(10,this)">10 MIN</button>
+        <button class="preset-btn"         onclick="setMins(15,this)">15 MIN</button>
+        <button class="preset-btn"         onclick="setMins(20,this)">20 MIN</button>
+    </div>
+
+    <div class="timer-face" id="timer-face">05:00</div>
+
+    <div class="timer-ctrl">
+        <button class="btn" onclick="resetMed()">RESET</button>
+        <button class="btn primary" id="med-btn" onclick="toggleMed()">INICIAR</button>
+    </div>
+
+    <hr class="div">
+
+    <div class="grid-2">
+        <div>
+            <h3>Técnica 4-7-8</h3>
+            <div class="card">
+                <div style="font-size:0.88rem;color:var(--muted);display:grid;gap:0.7rem;">
+                    <div><span style="color:var(--accent);font-family:monospace;font-size:0.7rem;">INHALA</span>&nbsp;&nbsp;4 segundos · por la nariz</div>
+                    <div><span style="color:var(--accent);font-family:monospace;font-size:0.7rem;">RETÉN</span>&nbsp;&nbsp;&nbsp;7 segundos · pausa completa</div>
+                    <div><span style="color:var(--accent);font-family:monospace;font-size:0.7rem;">EXHALA</span>&nbsp;&nbsp;8 segundos · por la boca suave</div>
+                    <div style="margin-top:0.5rem;font-size:0.78rem;">Repetir 4 ciclos. Activa el parasimpático. Ideal antes de dormir o post-entrenamiento.</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h3>Intención del día</h3>
+            <div class="card">
+                <textarea id="intention" class="intention-input" placeholder="Escribe tu intención para hoy..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <h3>Protocolo de meditación</h3>
+    <div class="step-list" style="margin-bottom:1.5rem;">
+        <div class="step-item">
+            <span class="step-n">01</span>
+            <div class="step-body"><h4>Postura</h4><p>Sentado · espalda recta · manos sobre rodillas · ojos cerrados</p></div>
+        </div>
+        <div class="step-item">
+            <span class="step-n">02</span>
+            <div class="step-body"><h4>Observación de la respiración — 3 min</h4><p>Sin controlar. Solo observa el aire entrando y saliendo. Si la mente divaga, regresa.</p></div>
+        </div>
+        <div class="step-item">
+            <span class="step-n">03</span>
+            <div class="step-body"><h4>Body scan — 3 min</h4><p>Recorre lentamente desde los pies hasta la cabeza. Suelta tensión en cada zona.</p></div>
+        </div>
+        <div class="step-item">
+            <span class="step-n">04</span>
+            <div class="step-body"><h4>Visualización — 3 min</h4><p>Tu versión ideal. El físico que construyes. La actitud que proyectas. Siente que ya es real.</p></div>
+        </div>
+        <div class="step-item" style="border:none;">
+            <span class="step-n">05</span>
+            <div class="step-body"><h4>Afirmación de cierre</h4><p>"Soy disciplinado. Actúo con intención. Me construyo cada día sin excusas."</p></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-label">Higiene mental — reglas fijas</div>
+        <div class="rule-list">
+            <div>Sin teléfono los primeros 30 min del día · El cerebro es tuyo por la mañana</div>
+            <div>Máximo 1h de redes sociales · Timer activado · Sin negociación</div>
+            <div>Lectura 20 min antes de dormir · Un libro, no artículos</div>
+            <div>Exposición solar 10 min al despertar · Ancla ritmo circadiano</div>
+            <div>Journaling semanal (domingo) · Qué funcionó · Qué mejorar · Meta de la semana</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════ LOOK ══════════════════════════════ -->
+<div id="tab-look" class="tab-content">
+    <h2>Looksmaxing Protocol</h2>
+    <p class="page-sub">Un mes de transformación sistemática. La apariencia es el resultado de hábitos compuestos.</p>
+
+    <div class="grid-2" style="margin-bottom:2rem;">
+        <div>
+            <h3>Skincare AM</h3>
+            <div class="step-list">
+                <div class="step-item">
+                    <span class="step-n">01</span>
+                    <div class="step-body"><h4>Limpieza suave</h4><p>Agua tibia · limpiador sin SLS · sin frotar</p></div>
+                </div>
+                <div class="step-item">
+                    <span class="step-n">02</span>
+                    <div class="step-body"><h4>Niacinamida 10%</h4><p>Poros · manchas · textura · aplicar con manos limpias</p></div>
+                </div>
+                <div class="step-item">
+                    <span class="step-n">03</span>
+                    <div class="step-body"><h4>Hidratante ligero</h4><p>Con ácido hialurónico si es posible · sin aceites pesados</p></div>
+                </div>
+                <div class="step-item" style="border:none;">
+                    <span class="step-n">04</span>
+                    <div class="step-body"><h4>SPF 50+ (obligatorio)</h4><p>El paso más importante del día · Previene envejecimiento y manchas</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h3>Skincare PM</h3>
+            <div class="step-list">
+                <div class="step-item">
+                    <span class="step-n">01</span>
+                    <div class="step-body"><h4>Doble limpieza</h4><p>Aceite limpiador → espuma · elimina SPF y suciedad del día</p></div>
+                </div>
+                <div class="step-item">
+                    <span class="step-n">02</span>
+                    <div class="step-body"><h4>Exfoliante químico — 3×/semana</h4><p>BHA (ácido salicílico) para poros · AHA para textura superficial</p></div>
+                </div>
+                <div class="step-item">
+                    <span class="step-n">03</span>
+                    <div class="step-body"><h4>Retinol 0.025% — iniciar</h4><p>Solo noche · semana de por medio · construir tolerancia gradual</p></div>
+                </div>
+                <div class="step-item" style="border:none;">
+                    <span class="step-n">04</span>
+                    <div class="step-body"><h4>Hidratante nocturno rico</h4><p>Ceramidas · péptidos · reparación mientras duermes</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Cuerpo y grooming</h3>
+    <div class="step-list" style="margin-bottom:2rem;">
+        <div class="step-item">
+            <span class="step-n">—</span>
+            <div class="step-body"><h4>Ducha fría (30 seg finales)</h4><p>Activa sistema simpático · mejora circulación · contrae poros · cierra cutícula del cabello</p></div>
+        </div>
+        <div class="step-item">
+            <span class="step-n">—</span>
+            <div class="step-body"><h4>Hidratación corporal</h4><p>Post-ducha en piel aún húmeda · enfocarse en codos, rodillas, talones</p></div>
+        </div>
+        <div class="step-item">
+            <span class="step-n">—</span>
+            <div class="step-body"><h4>Cabello</h4><p>Máximo 3 lavadas por semana con champú · agua fría para cerrar cutícula · sin frotar con toalla</p></div>
+        </div>
+        <div class="step-item">
+            <span class="step-n">—</span>
+            <div class="step-body"><h4>Higiene bucal completa</h4><p>Cepillado 2 min · hilo dental · enjuague · raspador de lengua</p></div>
+        </div>
+        <div class="step-item">
+            <span class="step-n">—</span>
+            <div class="step-body"><h4>Postura activa</h4><p>Glúteos activados al sentarte · chin tuck con el teléfono · columna neutra · hombros hacia atrás y abajo</p></div>
+        </div>
+        <div class="step-item" style="border:none;">
+            <span class="step-n">—</span>
+            <div class="step-body"><h4>Sueño de calidad — 8h</h4><p>Habitación fría (18–20°C) y oscura · el sueño es recuperación muscular + regeneración de piel</p></div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-label">Tratamientos 1× / semana</div>
+            <div class="rule-list">
+                <div>Mascarilla de arcilla o carbón activado</div>
+                <div>Exfoliación corporal (scrub o guante)</div>
+                <div>Masaje facial con Gua Sha o rodillo de jade</div>
+                <div>Aceite de ricino en cejas (crecimiento)</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-label">Variables de looksmaxing</div>
+            <div class="rule-list">
+                <div>% grasa bajo → mandíbula y pómulos definidos</div>
+                <div>Hombros anchos → ratio V visual ideal</div>
+                <div>Postura correcta → 3–5 cm más alto visual</div>
+                <div>Piel hidratada → luce más joven y sana</div>
+                <div>Hidratación interna → piel sin opacidad</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════ NUTRICIÓN ══════════════════════════════ -->
+<div id="tab-nut" class="tab-content">
+    <h2>Plan nutricional</h2>
+    <p class="page-sub">Déficit de 500 kcal/día · −0.5 kg/semana · Alta proteína para preservar músculo · Sin pasar hambre</p>
+
+    <div class="card" style="margin-bottom:2rem;">
+        <div class="card-label">Macros diarios objetivo</div>
+        <div class="grid-4">
+            <div class="macro-cell">
+                <div class="macro-num" style="color:var(--accent);font-size:2rem;">2000</div>
+                <div class="macro-lbl">KCAL TOTAL</div>
+            </div>
+            <div class="macro-cell">
+                <div class="macro-num" style="font-size:2rem;">200 g</div>
+                <div class="macro-lbl">PROTEÍNA</div>
+            </div>
+            <div class="macro-cell">
+                <div class="macro-num" style="font-size:2rem;">175 g</div>
+                <div class="macro-lbl">CARBOHIDRATOS</div>
+            </div>
+            <div class="macro-cell">
+                <div class="macro-num" style="font-size:2rem;">56 g</div>
+                <div class="macro-lbl">GRASAS</div>
+            </div>
+        </div>
+        <p style="font-family:monospace;font-size:0.65rem;color:var(--muted);margin-top:1.25rem;letter-spacing:0.08em;">
+            * Basado en TDEE ~2500 kcal. Ajusta: tu TDEE − 500 = tu meta. Calcula con calculadora Harris-Benedict.
+        </p>
+    </div>
+
+    <!-- DESAYUNO -->
+    <div class="meal-block">
+        <div class="meal-top">
+            <span class="meal-title">Desayuno — 06:00</span>
+            <span class="meal-cals">~470 kcal · 48 g proteína</span>
+        </div>
+        <div class="meal-inner">
+            <ul class="ing-list">
+                <li><span>5 claras de huevo + 2 huevos enteros</span><span class="ing-macro">26g prot · 200 kcal</span></li>
+                <li><span>80g avena integral (cruda)</span><span class="ing-macro">10g prot · 52g carbs · 290 kcal</span></li>
+                <li><span>1 plátano mediano</span><span class="ing-macro">23g carbs · 90 kcal</span></li>
+                <li><span>Canela + stevia · agua o leche descremada</span><span class="ing-macro">~5 kcal</span></li>
+            </ul>
+            <div class="recipe">
+                <div class="r-step" data-n="1">Cocina la avena con agua o leche descremada (1:2). Agrega canela y stevia.</div>
+                <div class="r-step" data-n="2">Bate claras + huevos enteros. Cocina en sartén antiadherente sin aceite.</div>
+                <div class="r-step" data-n="3">Sirve con el plátano. Come en los primeros 30 min tras despertar.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALMUERZO -->
+    <div class="meal-block">
+        <div class="meal-top">
+            <span class="meal-title">Almuerzo — 12:30</span>
+            <span class="meal-cals">~500 kcal · 52 g proteína</span>
+        </div>
+        <div class="meal-inner">
+            <ul class="ing-list">
+                <li><span>220g pechuga de pollo</span><span class="ing-macro">46g prot · 230 kcal</span></li>
+                <li><span>150g arroz blanco cocido</span><span class="ing-macro">35g carbs · 195 kcal</span></li>
+                <li><span>200g brócoli + espinaca salteada</span><span class="ing-macro">8g prot · 12g carbs · 60 kcal</span></li>
+                <li><span>10 ml aceite de oliva</span><span class="ing-macro">10g grasa · 90 kcal</span></li>
+                <li><span>Limón + ajo + orégano</span><span class="ing-macro">0 kcal</span></li>
+            </ul>
+            <div class="recipe">
+                <div class="r-step" data-n="1">Marina el pollo con limón, ajo, sal y pimienta durante 10 min.</div>
+                <div class="r-step" data-n="2">Cocina a la plancha sin aceite, 6–7 min por lado hasta dorado.</div>
+                <div class="r-step" data-n="3">Saltea el brócoli y espinaca con ajo, sal y unas gotas de limón.</div>
+                <div class="r-step" data-n="4">Sirve todo junto. Tip: prepara el doble para el día siguiente.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SNACK -->
+    <div class="meal-block">
+        <div class="meal-top">
+            <span class="meal-title">Snack — 16:00</span>
+            <span class="meal-cals">~250 kcal · 44 g proteína</span>
+        </div>
+        <div class="meal-inner">
+            <ul class="ing-list">
+                <li><span>200g yogur griego 0% grasa</span><span class="ing-macro">20g prot · 120 kcal</span></li>
+                <li><span>1 scoop proteína whey (si tienes)</span><span class="ing-macro">24g prot · 120 kcal</span></li>
+                <li><span>10 almendras</span><span class="ing-macro">6g grasa · 3g prot · 60 kcal</span></li>
+            </ul>
+            <div class="recipe">
+                <div class="r-step" data-n="1">Mezcla el yogur con el whey hasta consistencia uniforme.</div>
+                <div class="r-step" data-n="2">Agrega las almendras encima. Consume frío.</div>
+                <div class="r-step" data-n="3">Sin whey: sustituye con 100g cottage cheese (11g prot extra).</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CENA -->
+    <div class="meal-block">
+        <div class="meal-top">
+            <span class="meal-title">Cena — 19:30</span>
+            <span class="meal-cals">~450 kcal · 42 g proteína</span>
+        </div>
+        <div class="meal-inner">
+            <ul class="ing-list">
+                <li><span>170g salmón / tilapia / atún en agua</span><span class="ing-macro">36g prot · 300 kcal</span></li>
+                <li><span>150g camote / papa cocida</span><span class="ing-macro">28g carbs · 130 kcal</span></li>
+                <li><span>Ensalada grande (lechuga, tomate, pepino)</span><span class="ing-macro">6g carbs · 30 kcal</span></li>
+                <li><span>Aderezo: limón + mostaza (sin mayo)</span><span class="ing-macro">~20 kcal</span></li>
+            </ul>
+            <div class="recipe">
+                <div class="r-step" data-n="1">Hornea el salmón a 200°C por 15 min con sal, limón y eneldo.</div>
+                <div class="r-step" data-n="2">Cocina el camote al vapor o microondas (pincha con tenedor, 5–6 min).</div>
+                <div class="r-step" data-n="3">Prepara la ensalada con aderezo de limón + mostaza.</div>
+                <div class="r-step" data-n="4">Cena antes de las 20:00. Favorece la recuperación nocturna.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="card" style="margin-top:0.5rem;">
+        <div class="card-label">Total del día estimado</div>
+        <div class="grid-4">
+            <div class="macro-cell"><div class="macro-num" style="color:var(--accent);">1670</div><div class="macro-lbl">KCAL BASE</div></div>
+            <div class="macro-cell"><div class="macro-num">186 g</div><div class="macro-lbl">PROTEÍNA</div></div>
+            <div class="macro-cell"><div class="macro-num">150 g</div><div class="macro-lbl">CARBS</div></div>
+            <div class="macro-cell"><div class="macro-num">28 g</div><div class="macro-lbl">GRASAS</div></div>
+        </div>
+        <p style="font-size:0.72rem;color:var(--muted);font-family:monospace;margin-top:1rem;">Quedan ~330 kcal de margen para ajustar porciones o agregar colaciones según hambre y entrenamiento del día.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-label">Reglas del cut — sin excepción</div>
+        <div class="rule-list">
+            <div>Proteína primero en cada comida · nunca menos de 40g por toma</div>
+            <div>3 litros de agua mínimo al día · el hambre falsa es sed la mitad del tiempo</div>
+            <div>Sin alcohol · destruye la síntesis proteica y suma calorías vacías</div>
+            <div>Sin azúcar procesada · la fructosa de la fruta es el límite</div>
+            <div>Meal prep domingo y miércoles · sin excusas de "no tenía qué comer"</div>
+            <div>Si comes fuera: pechuga + ensalada sin aderezo + agua · siempre</div>
+            <div>Pesarte cada lunes en ayunas, misma hora, sin ropa · 0.3–0.7 kg/semana es ideal</div>
+        </div>
+    </div>
+</div>
+
+</main>
+
+<script>
+    // ── Clock ──────────────────────────────────────────────
+    const DAYS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+    function tick() {
+        const n = new Date();
+        document.getElementById('clock').textContent = n.toTimeString().slice(0,8);
+        document.getElementById('datestr').textContent =
+            `${DAYS[n.getDay()]}, ${n.getDate()} de ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+    }
+    setInterval(tick, 1000); tick();
+
+    // ── Quotes ─────────────────────────────────────────────
+    const QUOTES = [
+        { t: '"La disciplina es la puente entre metas y logros."', a: '— JIM ROHN' },
+        { t: '"El dolor que sientes hoy será la fuerza que sientes mañana."', a: '— ARNOLD SCHWARZENEGGER' },
+        { t: '"No cuentes los días. Haz que los días cuenten."', a: '— MUHAMMAD ALI' },
+        { t: '"El único mal entrenamiento es el que no hiciste."', a: '— ANONIMATO' },
+        { t: '"El éxito no es un accidente. Es trabajo duro, perseverancia y sacrificio."', a: '— PELÉ' },
+        { t: '"Cuídate. Cuida tu cuerpo. Cuida tu mente. El resto llegará solo."', a: '— EPICTETO' },
+        { t: '"El hombre que tiene dominio sobre sí mismo puede conquistar cualquier cosa."', a: '— ESTOICISMO' },
+    ];
+    const q = QUOTES[new Date().getDay() % QUOTES.length];
+    document.getElementById('daily-quote').textContent = q.t;
+    document.getElementById('quote-auth').textContent = q.a;
+
+    // ── Tabs ───────────────────────────────────────────────
+    function go(name, el) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        el.classList.add('active');
+    }
+
+    // ── Checklist ──────────────────────────────────────────
+    function chk(el) { el.classList.toggle('done'); }
+
+    // ── Calories ───────────────────────────────────────────
+    const CAL_GOAL = 2000;
+    function updCal() {
+        const v = parseInt(document.getElementById('cal-in').value) || 0;
+        const pct = Math.min(100, (v / CAL_GOAL) * 100);
+        const rem = CAL_GOAL - v;
+        document.getElementById('cal-bar').style.width = pct + '%';
+        document.getElementById('cal-bar').style.background = v > CAL_GOAL ? 'var(--red)' : 'var(--accent)';
+        document.getElementById('cal-rest').textContent =
+            rem >= 0 ? `${rem} restantes` : `${Math.abs(rem)} sobre la meta`;
+    }
+
+    // ── Water ──────────────────────────────────────────────
+    let waterGlasses = 0;
+    function adjWater(d) {
+        waterGlasses = Math.max(0, waterGlasses + d);
+        const liters = (waterGlasses * 0.25).toFixed(2).replace(/\.?0+$/, '');
+        document.getElementById('water-disp').textContent = liters + ' L';
+    }
+
+    // ── Habit tracker ──────────────────────────────────────
+    const DAY_LABELS = ['L','M','M','J','V','S','D'];
+    ['h-gym','h-run','h-med','h-skin','h-read','h-sugar'].forEach(id => {
+        const c = document.getElementById(id);
+        DAY_LABELS.forEach(d => {
+            const dot = document.createElement('div');
+            dot.className = 'h-dot';
+            dot.textContent = d;
+            dot.onclick = () => dot.classList.toggle('on');
+            c.appendChild(dot);
+        });
+    });
+
+    // ── Gym day selector ───────────────────────────────────
+    function showDay(day, btn) {
+        document.querySelectorAll('.gym-day').forEach(d => d.style.display = 'none');
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('gd-' + day).style.display = 'block';
+        btn.classList.add('active');
+    }
+
+    // ── Run accordion ──────────────────────────────────────
+    function togWeek(id) {
+        const body = document.getElementById('wb-' + id);
+        const arr = document.getElementById('arr-' + id);
+        const isOpen = body.classList.contains('open');
+        body.classList.toggle('open');
+        arr.textContent = isOpen ? '▸' : '▾';
+    }
+
+    // ── Meditation timer ───────────────────────────────────
+    let medSecs = 300, medRunning = false, medInterval = null;
+
+    function setMins(m, btn) {
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        medSecs = m * 60;
+        resetMed();
+    }
+
+    function fmt(s) {
+        return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    }
+
+    function toggleMed() {
+        if (medRunning) {
+            clearInterval(medInterval);
+            medRunning = false;
+            document.getElementById('med-btn').textContent = 'CONTINUAR';
+        } else {
+            medInterval = setInterval(() => {
+                if (medSecs <= 0) {
+                    clearInterval(medInterval);
+                    medRunning = false;
+                    document.getElementById('timer-face').textContent = '✓ COMPLETADO';
+                    document.getElementById('med-btn').textContent = 'INICIAR';
+                    return;
+                }
+                medSecs--;
+                document.getElementById('timer-face').textContent = fmt(medSecs);
+            }, 1000);
+            medRunning = true;
+            document.getElementById('med-btn').textContent = 'PAUSAR';
+        }
+    }
+
+    function resetMed() {
+        clearInterval(medInterval);
+        medRunning = false;
+        const active = document.querySelector('.preset-btn.active');
+        medSecs = active ? parseInt(active.textContent) * 60 : 300;
+        document.getElementById('timer-face').textContent = fmt(medSecs);
+        document.getElementById('med-btn').textContent = 'INICIAR';
+    }
+
+    // ── Persist intention ──────────────────────────────────
+    const intentionKey = 'intention-' + new Date().toDateString();
+    const savedInt = localStorage.getItem(intentionKey);
+    if (savedInt) document.getElementById('intention').value = savedInt;
+    document.getElementById('intention').addEventListener('input', function() {
+        localStorage.setItem(intentionKey, this.value);
+    });
+</script>
+</body>
+</html>
