@@ -294,7 +294,7 @@ hr{border:none;border-top:1px solid var(--br);margin:1.1rem 0}
         <div class="date-card" data-id="d15" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Cena degustación</div><div class="dc-d">Restaurante de menú de varios tiempos</div></div>
         <div class="date-card" data-id="d16" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Experiencia nueva juntos</div><div class="dc-d">Paracaídas, alpinismo, kayak — algo primero</div></div>
         <div class="date-card" data-id="d17" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Concierto de artista favorito</div><div class="dc-d">Planea con anticipación. Memorias duran</div></div>
-        <div class="date-card" data-id="d18" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Clase de arte juntos</div><div class="dc-d">Cerámica, pintura, escultura — crear algo</div></div>
+        <div class="date-card" data-id="d18" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Clases de arte juntos</div><div class="dc-d">Cerámica, pintura, escultura — crear algo</div></div>
         <div class="date-card" data-id="d19" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Noche sorpresa</div><div class="dc-d">Planea todo en secreto — destino revelado</div></div>
         <div class="date-card" data-id="d20" onclick="toggleDate(this)"><div class="dc-cat">ESPECIAL</div><div class="dc-n">Viaje planeado juntos</div><div class="dc-d">La planeación del viaje ya es la cita</div></div>
       </div>
@@ -335,7 +335,7 @@ const R={
 // ── Cloud Sync ─────────────────────────────────────────
 const FB='https://rutine-f29f9-default-rtdb.europe-west1.firebasedatabase.app/rutine';
 (()=>{const _s=R.set.bind(R);R.set=(k,v)=>{_s(k,v);fetch(`${FB}/${k}.json`,{method:'PUT',body:JSON.stringify(v)}).catch(()=>{});};})();
-(async()=>{if(sessionStorage.getItem('rt_synced'))return;try{const res=await fetch(`${FB}.json`);const data=await res.json();sessionStorage.setItem('rt_synced','1');if(data&&typeof data==='object'){let c=false;Object.entries(data).forEach(([k,v])=>{const s=JSON.stringify(v);if(localStorage.getItem('rt_'+k)!==s){localStorage.setItem('rt_'+k,s);c=true;}});if(c)location.reload();}}catch(e){sessionStorage.setItem('rt_synced','1');}})();
+(async()=>{const LS=parseInt(localStorage.getItem('rt__ls')||'0');if(Date.now()-LS<30000)return;try{const res=await fetch(`${FB}.json`);const data=await res.json();localStorage.setItem('rt__ls',Date.now());if(data&&typeof data==='object'){let c=false;Object.entries(data).forEach(([k,v])=>{if(k==='test_sync')return;const s=JSON.stringify(v);if(localStorage.getItem('rt_'+k)!==s){localStorage.setItem('rt_'+k,s);c=true;}});if(c)location.reload();}}catch(e){}})();
 
 function togAcc(id){document.getElementById(id).classList.toggle('open');}
 
